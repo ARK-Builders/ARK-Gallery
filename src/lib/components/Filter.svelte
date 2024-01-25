@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import { galleryStore } from '$lib/store'
 
 	export let filter = ''
@@ -7,6 +8,8 @@
 
 	const updateFilter = async () => {
 		let _images = $galleryStore.images
+
+		// $page.url.searchParams.set('filter', filter)
 
 		switch (filter) {
 			case 'date':
