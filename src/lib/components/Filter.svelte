@@ -27,6 +27,11 @@
 					return ('' + a.name).localeCompare(b.name)
 				})
 				break
+			case 'tag':
+				_images.sort((a: any, b: any) => {
+					return ('' + a.tag).localeCompare(b.tag)
+				})
+				break
 			default:
 				break
 		}
