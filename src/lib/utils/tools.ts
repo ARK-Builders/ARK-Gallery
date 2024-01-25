@@ -1,3 +1,6 @@
+import { galleryStore } from '$lib/store'
+import { get } from 'svelte/store'
+
 export const openDirectory = async (mode = 'read') => {
 	// Feature detection. The API needs to be supported
 	// and the app not run in an iframe.
@@ -68,4 +71,29 @@ export const openDirectory = async (mode = 'read') => {
 			input.click()
 		}
 	})
+}
+
+export const proccessFiles = async (files: File[]) => {
+	let images: any[] = []
+
+	files.forEach((file) => {
+		if (file.type && !file.type.startsWith('image/')) {
+			console.error('File is not an image.', file.type, file)
+			return
+		}
+		var reader = new FileReader()
+
+		reader.addEventListener(
+			'load',
+			() => {
+				images.push(reader.result)
+			},
+			false
+		)
+
+		if (file) {
+			reader.readAsDataURL(file)
+		}
+	})
+	// return images
 }

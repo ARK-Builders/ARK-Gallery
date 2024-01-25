@@ -1,6 +1,4 @@
 <script lang="ts">
-	import Fa from 'svelte-fa'
-	import { faImage } from '@fortawesome/free-regular-svg-icons'
 	import { openDirectory } from '$lib/utils/tools'
 	import Gallery from '$lib/components/Gallery.svelte'
 	import Filter from '$lib/components/Filter.svelte'
@@ -13,21 +11,20 @@
 		images = []
 		$galleryStore.images = []
 		const filesDir: File[] = (await openDirectory()) as File[]
-		console.log(filesDir)
+
+		$galleryStore.fileInfos = filesDir
+
 		if (filesDir && filesDir.length) {
 			filesDir.forEach((file) => {
 				if (file.type && !file.type.startsWith('image/')) {
 					console.log('File is not an image.', file.type, file)
 					return
 				}
-				// console.log(file)
-
 				var reader = new FileReader()
 
 				reader.addEventListener(
 					'load',
 					function () {
-						// preview.src = reader.result
 						images.push(reader.result)
 						$galleryStore.images = images
 					},

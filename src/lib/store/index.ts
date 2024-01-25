@@ -1,7 +1,8 @@
 import { get, writable } from 'svelte/store'
 
 const galleryInterface = {
-	images: []
+	images: [] as any,
+	fileInfos: [] as File[]
 }
 
 export const galleryStore = writable(galleryInterface)
