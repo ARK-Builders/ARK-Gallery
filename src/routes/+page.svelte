@@ -25,7 +25,11 @@
 				reader.addEventListener(
 					'load',
 					function () {
-						images.push(reader.result)
+						let {name, size, lastModified, type} = file
+						images.push({
+							src: reader.result,
+							name, size, lastModified, type
+						})
 						$galleryStore.images = images
 					},
 					false
@@ -38,7 +42,7 @@
 		}
 	}
 
-	// $: console.log(images)
+	// $: console.log($galleryStore.images)
 </script>
 
 <svelte:head>

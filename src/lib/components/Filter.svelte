@@ -5,8 +5,8 @@
 
 	const filters = ['date', 'map', 'name', 'size', 'tag']
 
-	const updateFilter = () => {
-		let _images = $galleryStore.fileInfos
+	const updateFilter = async () => {
+		let _images = $galleryStore.images
 
 		switch (filter) {
 			case 'date':
@@ -19,12 +19,15 @@
 					return a.size - b.size
 				})
 				break
+			case 'name':
+				_images.sort((a: File, b: File) => {
+					return ('' + a.name).localeCompare(b.name)
+				})
+				break
 			default:
 				break
 		}
-
-		console.log(_images)
-		// $galleryStore.images = _images
+		$galleryStore.images = _images
 	}
 </script>
 
