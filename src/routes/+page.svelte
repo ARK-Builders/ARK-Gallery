@@ -3,11 +3,15 @@
 	import { faImage } from '@fortawesome/free-regular-svg-icons'
 	import { openDirectory } from '$lib/utils/tools'
 	import Gallery from '$lib/components/Gallery.svelte'
+	import Filter from '$lib/components/Filter.svelte'
+	import Actions from '$lib/components/Actions.svelte'
+	import { galleryStore } from '$lib/store'
 
 	let images: any = []
 
 	const uploadFolder = async () => {
 		images = []
+		$galleryStore.images = []
 		const filesDir: File[] = (await openDirectory()) as File[]
 		console.log(filesDir)
 		if (filesDir && filesDir.length) {
@@ -25,7 +29,7 @@
 					function () {
 						// preview.src = reader.result
 						images.push(reader.result)
-						images = images
+						$galleryStore.images = images
 					},
 					false
 				)
@@ -44,18 +48,8 @@
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
 
-<div class="flex flex-col max-w-7xl p-5 w-full rounded-md mx-auto">
-	<div class="flex flex-row gap-5 justify-end mt-10">
-		<button
-			on:click={() => uploadFolder()}
-			class="flex flex-row items-center text-white gap-2 rounded-lg bg-blue-400 hover:bg-blue-600 px-4 py-2"
-		>
-			<Fa icon={faImage} />
-			<span>Select images</span>
-		</button>
-	</div>
-
-	{#if images.length}
-		<Gallery bind:images />
-	{/if}
+<div class="flex flex-col max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
+	<Filter />
+	<Actions on:upload={() => uploadFolder()} />
+	<Gallery />
 </div>
