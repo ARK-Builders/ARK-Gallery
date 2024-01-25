@@ -4,7 +4,6 @@
 
 	export let image: any
 	let hasHover = false
-
 </script>
 
 <div
@@ -21,15 +20,20 @@
 	/>
 	<div
 		class:hidden={!hasHover && !image.tag}
-		class="absolute bottom-0 bg-black bg-opacity-40 flex items-center w-full rounded-bl-md rounded-br-lg"
+		class="absolute bottom-0 bg-black text-white bg-opacity-40 flex items-center w-full rounded-bl-md rounded-br-lg"
 	>
+		<span class="absolute left-1 text-lg">#</span>
 		<input
 			bind:value={image.tag}
 			type="text"
-			class=" text-white w-full py-1 px-1 bg-transparent bottom-0 focus:outline-none"
+			class="w-full py-1 pl-4 bg-transparent bottom-0 focus:outline-none"
 		/>
-		<button on:click={() => image.tag = ''} class:hidden={!image.tag} class="absolute right-1 text-white">
-			<Fa icon={faTrashAlt} />
+		<button
+			on:click={() => (image.tag = '')}
+			class:hidden={!image.tag}
+			class="absolute right-1 text-white"
+		>
+			<Fa icon={faTrashAlt} size=".8x" />
 		</button>
 	</div>
 </div>
