@@ -25,10 +25,13 @@
 				reader.addEventListener(
 					'load',
 					function () {
-						let {name, size, lastModified, type} = file
+						let { name, size, lastModified, type } = file
 						images.push({
 							src: reader.result,
-							name, size, lastModified, type
+							name,
+							size,
+							lastModified,
+							type
 						})
 						$galleryStore.images = images
 					},
@@ -42,7 +45,12 @@
 		}
 	}
 
-	// $: console.log($galleryStore.images)
+	$: console.log($galleryStore.images)
+
+	const deleteImage = () => {
+		if ($galleryStore.selectedImage) {
+		}
+	}
 </script>
 
 <svelte:head>
@@ -51,6 +59,6 @@
 
 <div class="flex flex-col max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
 	<Filter />
-	<Actions on:upload={() => uploadFolder()} />
+	<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
 	<Gallery />
 </div>
