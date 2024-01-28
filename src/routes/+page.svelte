@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { openDirectory } from '$lib/utils/tools'
+	import { makeid, openDirectory } from '$lib/utils/tools'
 	import Gallery from '$lib/components/Gallery.svelte'
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
@@ -25,10 +25,14 @@
 				reader.addEventListener(
 					'load',
 					function () {
-						let {name, size, lastModified, type} = file
+						let { name, size, lastModified, type } = file
 						images.push({
+							id: makeid(5),
 							src: reader.result,
-							name, size, lastModified, type
+							name,
+							size,
+							lastModified,
+							type
 						})
 						$galleryStore.images = images
 					},
@@ -42,7 +46,20 @@
 		}
 	}
 
-	// $: console.log($galleryStore.images)
+	$: console.log($galleryStore.images)
+
+	const deleteImage = () => {
+		if ($galleryStore.selectedImage) {
+			// $galleryStore.modal = true;
+			// return
+
+			const idx = $galleryStore.images
+				.map((item: any) => item.id)
+				.indexOf($galleryStore.selectedImage.id)
+			$galleryStore.images.splice(idx, 1)
+			$galleryStore.images = $galleryStore.images
+		}
+	}
 </script>
 
 <svelte:head>
@@ -51,6 +68,6 @@
 
 <div class="flex flex-col max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
 	<Filter />
-	<Actions on:upload={() => uploadFolder()} />
+	<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
 	<Gallery />
 </div>

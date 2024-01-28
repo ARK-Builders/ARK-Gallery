@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { galleryStore } from "$lib/store"
-	import Image from "./Image.svelte"
+	import Image from "$lib/components/Image.svelte"
 
 </script>
 
