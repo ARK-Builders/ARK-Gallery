@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { openDirectory } from '$lib/utils/tools'
+	import { makeid, openDirectory } from '$lib/utils/tools'
 	import Gallery from '$lib/components/Gallery.svelte'
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
@@ -27,6 +27,7 @@
 					function () {
 						let { name, size, lastModified, type } = file
 						images.push({
+							id: makeid(5),
 							src: reader.result,
 							name,
 							size,
@@ -49,6 +50,11 @@
 
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
+			const idx = $galleryStore.images
+				.map((item: any) => item.id)
+				.indexOf($galleryStore.selectedImage.id)
+			$galleryStore.images.splice(idx, 1)
+			$galleryStore.images = $galleryStore.images
 		}
 	}
 </script>
