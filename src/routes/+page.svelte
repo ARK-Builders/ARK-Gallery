@@ -50,6 +50,9 @@
 
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
+			// $galleryStore.modal = true;
+			// return
+
 			const idx = $galleryStore.images
 				.map((item: any) => item.id)
 				.indexOf($galleryStore.selectedImage.id)
