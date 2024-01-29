@@ -3,6 +3,7 @@
 	import Fa from 'svelte-fa'
 	import { onMount } from 'svelte'
 	import { galleryStore } from '$lib/store'
+	import Button from './ui/button/button.svelte'
 
 	let data: any
 	let disabled: boolean = false
@@ -24,16 +25,12 @@
 		<hr class="py-1" />
 		<!-- <div>Body</div> -->
 		<div class="flex flex-row gap-5 w-full py-2">
-			<button
-				class="bg-white outline outline-1 outline-gray-400 text-black w-full rounded-lg py-2 disabled:cursor-not-allowed disabled:bg-opacity-60"
-			>
+			<Button on:click={() => console.log('no')} variant={'outline'} class="w-full">
 				No
-			</button>
-			<button
-				class="bg-black w-full rounded-lg text-white py-2 disabled:cursor-not-allowed disabled:bg-opacity-60"
-			>
+			</Button>
+			<Button class="w-full" on:click={() => console.log("yes")}>
 				Yes
-			</button>
+			</Button>
 		</div>
 	</div>
 </div>
