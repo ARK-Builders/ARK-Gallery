@@ -55,7 +55,7 @@
 	$: filter, updateFilter()
 </script>
 
-<div class="flex flex-row items-center w-full rounded-full shadow-lg bg-white py-3 px-10">
+<div class="flex flex-row items-center w-full rounded-full shadow-lg bg-white py-2 px-10">
 	<p>Show</p>
 
 	<!-- <select bind:value={filter} on:change={() => updateFilter()} class="outline-none px-1 pb-[1px]">

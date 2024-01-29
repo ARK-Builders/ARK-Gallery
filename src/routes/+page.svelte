@@ -46,19 +46,21 @@
 		}
 	}
 
-	$: console.log($galleryStore.images)
-
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
-			$galleryStore.modal = true;
+			$galleryStore.modalQuestion = "Are you sure want to delete that image?"
+			$galleryStore.modal = true
 			return
-
-			const idx = $galleryStore.images
-				.map((item: any) => item.id)
-				.indexOf($galleryStore.selectedImage.id)
-			$galleryStore.images.splice(idx, 1)
-			$galleryStore.images = $galleryStore.images
 		}
+	}
+
+	$: if ($galleryStore.isDeleteImage == true) {
+		const idx = $galleryStore.images
+			.map((item: any) => item.id)
+			.indexOf($galleryStore.selectedImage?.id)
+		$galleryStore.images.splice(idx, 1)
+		$galleryStore.images = $galleryStore.images
+		$galleryStore.isDeleteImage = false
 	}
 </script>
 
