@@ -6,7 +6,7 @@
 	export let image: any
 	let hasHover = false
 
-	$: imageHeight = $galleryStore.zoomLevel + 70
+	$: imageHeight = $galleryStore.zoomLevel + 80
 </script>
 
 <div
