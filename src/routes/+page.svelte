@@ -62,6 +62,7 @@
 		$galleryStore.images.splice(idx, 1)
 		$galleryStore.images = $galleryStore.images
 		$galleryStore.isDeleteImage = false
+		$galleryStore.selectedImage = null
 	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
@@ -71,15 +72,13 @@
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
 
-<div class="flex flex-col max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
-	<Filter />
-	<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
-	<Gallery />
-	<div
-		class="flex py-10 flex-row justify-end {$galleryStore.images?.length
-			? ''
-			: 'absolute bottom-0 right-40'}"
-	>
+<div class="flex flex-col justify-between max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
+	<div>
+		<Filter />
+		<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
+		<Gallery />
+	</div>
+	<div class="flex py-10 flex-row justify-end">
 		<Slider
 			bind:value={zoomLevel}
 			onValueChange={(e) => ($galleryStore.zoomLevel = e[0])}
