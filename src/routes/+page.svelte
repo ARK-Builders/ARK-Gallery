@@ -4,6 +4,7 @@
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
+	import { Slider } from "$lib/components/ui/slider";
 
 	let images: any = []
 
@@ -72,4 +73,7 @@
 	<Filter />
 	<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
 	<Gallery />
+	<div class="flex py-10 absolute bottom-0 right-40 flex-row justify-end">
+		<Slider class="w-80" max={150} min={100} step={1} />
+	</div>
 </div>
