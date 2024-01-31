@@ -20,8 +20,7 @@
 		{ value: 'size', label: 'size' },
 		{ value: 'tag', label: 'tag' }
 	]
-
-	// const filters = ['date', 'map', 'name', 'size', 'tag']
+	let tmr: number
 
 	const updateFilter = async () => {
 		let _images = $galleryStore.images
@@ -50,7 +49,10 @@
 			default:
 				break
 		}
-		$galleryStore.images = _images
+		if (tmr) clearTimeout(tmr)
+		tmr = setTimeout(() => {
+			$galleryStore.images = _images
+		}, 10)
 	}
 	$: filter, updateFilter()
 </script>
