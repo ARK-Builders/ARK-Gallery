@@ -25,16 +25,16 @@
 				<Fa icon={faMultiply} />
 			</button>
 		</div>
-		<div>
-			<p class="text py-4">{$galleryStore.modalQuestion}</p>
+		<div class="p-2">
+			<p class="text text-center py-4">{$galleryStore.modalQuestion}</p>
 		</div>
-		<hr class="py-1" />
+		<!-- <hr class="py-1" /> -->
 		<!-- <div>Body</div> -->
-		<div class="flex flex-row gap-5 w-full py-2">
-			<Button on:click={() => ($galleryStore.modal = false)} variant={'outline'} class="w-full">
+		<div class="flex flex-row gap-5 justify-center py-2">
+			<Button on:click={() => ($galleryStore.modal = false)} variant={'outline'} class="w-32">
 				No
 			</Button>
-			<Button class="w-full" on:click={() => handleYes()}>Yes</Button>
+			<Button class="w-32" on:click={() => handleYes()}>Yes</Button>
 		</div>
 	</div>
 </div>
