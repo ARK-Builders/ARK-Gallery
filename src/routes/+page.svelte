@@ -4,7 +4,7 @@
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
-	import { Slider } from "$lib/components/ui/slider";
+	import { Slider } from '$lib/components/ui/slider'
 
 	let images: any = []
 
@@ -49,7 +49,7 @@
 
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
-			$galleryStore.modalQuestion = "Are you sure want to delete that image?"
+			$galleryStore.modalQuestion = 'Are you sure want to delete that image?'
 			$galleryStore.modal = true
 			return
 		}
@@ -63,6 +63,8 @@
 		$galleryStore.images = $galleryStore.images
 		$galleryStore.isDeleteImage = false
 	}
+
+	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 </script>
 
 <svelte:head>
@@ -73,7 +75,18 @@
 	<Filter />
 	<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
 	<Gallery />
-	<div class="flex py-10 flex-row justify-end {$galleryStore.images?.length ? '' : 'absolute bottom-0 right-40'}">
-		<Slider class="w-80" max={150} min={100} step={1} />
+	<div
+		class="flex py-10 flex-row justify-end {$galleryStore.images?.length
+			? ''
+			: 'absolute bottom-0 right-40'}"
+	>
+		<Slider
+			bind:value={zoomLevel}
+			onValueChange={(e) => ($galleryStore.zoomLevel = e[0])}
+			class="w-80"
+			max={130}
+			min={80}
+			step={1}
+		/>
 	</div>
 </div>

@@ -6,7 +6,8 @@ const galleryInterface = {
 	selectedImage: null,
 	isDeleteImage: false,
 	modal: false,
-	modalQuestion: ''
+	modalQuestion: '',
+	zoomLevel: 100
 }
 
 export const galleryStore = writable(galleryInterface)

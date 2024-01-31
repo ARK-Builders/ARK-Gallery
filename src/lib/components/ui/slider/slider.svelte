@@ -23,5 +23,7 @@
 		/>
 	</SliderPrimitive.Root>
 
-	{value}%
+	<span class="w-10">
+		{value}%
+	</span>
 </div>
