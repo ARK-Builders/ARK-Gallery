@@ -73,7 +73,7 @@
 	<Filter />
 	<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
 	<Gallery />
-	<div class="flex py-10 absolute bottom-0 right-40 flex-row justify-end">
+	<div class="flex py-10 flex-row justify-end {$galleryStore.images?.length ? '' : 'absolute bottom-0 right-40'}">
 		<Slider class="w-80" max={150} min={100} step={1} />
 	</div>
 </div>
