@@ -3,10 +3,15 @@
 	import Fa from 'svelte-fa'
 	import { onMount } from 'svelte'
 	import { galleryStore } from '$lib/store'
+	import Button from './ui/button/button.svelte'
 
 	let data: any
 	let disabled: boolean = false
 
+	const handleYes = () => {
+		$galleryStore.isDeleteImage = true
+		$galleryStore.modal = false
+	}
 </script>
 
 <div
@@ -15,25 +20,21 @@
 	class="flex overflow-y-auto overflow-x-hidden backdrop-blur-sm fixed bg-black bg-opacity-40 z-50 justify-center items-center w-screen h-screen"
 >
 	<div class="flex flex-col min-w-96 rounded-xl border shadow-sm pb-5 px-5 bg-white">
-		<div class="flex flex-row justify-between">
-			<p class="capitalize font-semibold text-lg py-4">Questions here</p>
-			<button on:click={() => $galleryStore.modal = false}>
+		<div class="flex flex-row mt-2 justify-end">
+			<button on:click={() => ($galleryStore.modal = false)}>
 				<Fa icon={faMultiply} />
 			</button>
 		</div>
-		<hr class="py-1" />
+		<div class="p-2">
+			<p class="text text-center py-4">{$galleryStore.modalQuestion}</p>
+		</div>
+		<!-- <hr class="py-1" /> -->
 		<!-- <div>Body</div> -->
-		<div class="flex flex-row gap-5 w-full py-2">
-			<button
-				class="bg-white outline outline-1 outline-gray-400 text-black w-full rounded-lg py-2 disabled:cursor-not-allowed disabled:bg-opacity-60"
-			>
+		<div class="flex flex-row gap-5 justify-center py-2">
+			<Button on:click={() => ($galleryStore.modal = false)} variant={'outline'} class="w-32">
 				No
-			</button>
-			<button
-				class="bg-black w-full rounded-lg text-white py-2 disabled:cursor-not-allowed disabled:bg-opacity-60"
-			>
-				Yes
-			</button>
+			</Button>
+			<Button class="w-32" on:click={() => handleYes()}>Yes</Button>
 		</div>
 	</div>
 </div>
