@@ -4,6 +4,7 @@
 	import { faTag, faTrash } from '@fortawesome/free-solid-svg-icons'
 	import { createEventDispatcher } from 'svelte'
 	import Fa from 'svelte-fa'
+
 	import { Button } from '$lib/components/ui/button'
 	import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 

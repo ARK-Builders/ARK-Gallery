@@ -5,6 +5,7 @@
 	import { galleryStore } from '$lib/store'
 	import Button from './ui/button/button.svelte'
 
+
 	let data: any
 	let disabled: boolean = false
 
@@ -12,6 +13,7 @@
 		$galleryStore.isDeleteImage = true
 		$galleryStore.modal = false
 	}
+
 </script>
 
 <div
