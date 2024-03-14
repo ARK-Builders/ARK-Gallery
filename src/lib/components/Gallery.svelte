@@ -5,7 +5,7 @@
 
 {#if $galleryStore.images?.length}
 	<div
-		class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 px-2 gap-3 mt-10 max-h-[520px] overflow-auto"
+		class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 px-2 gap-3 mt-10 max-h-[60vh] overflow-auto"
 	>
 		{#each $galleryStore.images as image, i}
 			<Image bind:image />
