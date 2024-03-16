@@ -39,5 +39,5 @@ jobs:
       - name: Upload AppImage
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: ark-rate-desktop.AppImage
+          name: ark-gallery.AppImage
           path: ./src-tauri/target/release/bundle/appimage/ark-gallery_*_amd64.AppImage
