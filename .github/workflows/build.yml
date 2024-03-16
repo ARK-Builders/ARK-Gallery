@@ -18,7 +18,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3.2.0
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
 
@@ -37,7 +37,7 @@ jobs:
         run: yarn tauri build
 
       - name: Upload AppImage
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: ark-gallery.AppImage
           path: ./src-tauri/target/release/bundle/appimage/ark-gallery_*_amd64.AppImage
