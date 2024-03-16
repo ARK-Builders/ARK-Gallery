@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "dev.ark-builders.gallery",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

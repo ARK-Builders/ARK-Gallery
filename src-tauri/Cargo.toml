@@ -1,11 +1,11 @@
 [package]
-name = "app"
+name = "ark-gallery"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+description = "ARK Gallery"
+authors = ["ARK Builders"]
+license = "MIT"
+repository = "https://github.com/ARK-Builders/ARK-Gallery"
+default-run = "ark-gallery"
 edition = "2021"
 rust-version = "1.60"
 
