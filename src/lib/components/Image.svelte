@@ -5,6 +5,9 @@
 
 	export let image: any
 	let hasHover = false
+
+	$: imageHeight = $galleryStore.zoomLevel + 80
+
 </script>
 
 <div
@@ -12,7 +15,9 @@
 	on:focus
 	on:mouseover={() => (hasHover = true)}
 	on:mouseleave={() => (hasHover = false)}
-	class="flex flex-col relative rounded-md h-36 bg-gray-100"
+	class="flex flex-col relative rounded-md bg-gray-100"
+	style="height: {imageHeight}px;"
+
 >
 	<button
 		on:click={() => ($galleryStore.selectedImage = image)}
