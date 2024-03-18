@@ -3,37 +3,65 @@ name: Release the app
 on:
   push:
     tags:
-    - '*'
+      - '*'
 
 jobs:
-  release:
+  release-linux:
     runs-on: ubuntu-latest
     environment: Development
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-        components: rustfmt, clippy
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3.2.0
-      with:
-        node-version: '16.x'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.2.0
+        with:
+          node-version: '16.x'
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libgtk-3-dev \
-          webkit2gtk-4.0 libappindicator3-dev \
-          librsvg2-dev patchelf libdbus-1-dev \
-          pkg-config
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev \
+            webkit2gtk-4.0 libappindicator3-dev \
+            librsvg2-dev patchelf libdbus-1-dev \
+            pkg-config
 
-    - name: Fetch Node.js dependencies
-      run: yarn
+      - name: Fetch Node.js dependencies
+        run: yarn
 
-    - name: Build Release version
-      run: yarn tauri build
+      - name: Build Release version
+        run: yarn tauri build
+
+  release-windows:
+    runs-on: windows-latest
+    environment: Development
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.2.0
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: |
+          choco install -y nodejs
+
+      - name: Fetch Node.js dependencies
+        run: yarn
+
+      - name: Build Release version
+        run: yarn tauri build
