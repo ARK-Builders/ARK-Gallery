@@ -38,6 +38,12 @@ jobs:
       - name: Build Release version
         run: yarn tauri build
 
+      - name: Release AppImage
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: './target/release/bundle/appimage/*.AppImage'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   release-windows:
     runs-on: windows-latest
     environment: Development
@@ -65,3 +71,9 @@ jobs:
 
       - name: Build Release version
         run: yarn tauri build
+
+      - name: Release Windows
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: './target/release/bundle/*.exe'
+          token: ${{ secrets.GITHUB_TOKEN }}
