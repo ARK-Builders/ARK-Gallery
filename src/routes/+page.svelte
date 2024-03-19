@@ -5,9 +5,10 @@
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
+	import { onMount } from 'svelte'
+	import type { ImageType } from '$lib/utils/types'
 
-
-	let images: any = []
+	let images: ImageType[] = []
 
 	const uploadFolder = async () => {
 		images = []
@@ -68,6 +69,9 @@
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 
+	onMount(() => {
+		localStorage.setItem('tags', JSON.stringify(['one', 'two']))
+	})
 </script>
 
 <svelte:head>
