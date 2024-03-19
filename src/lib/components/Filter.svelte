@@ -24,9 +24,9 @@
 
 	const updateFilter = async () => {
 		let _images = $galleryStore.images
+		$galleryStore.activeFilter = filter.value
 
 		switch (filter.value) {
-
 			case 'date':
 				_images.sort((a: File, b: File) => {
 					return a.lastModified - b.lastModified
@@ -68,9 +68,12 @@
 			<option value={_filter}>By {_filter}</option>
 		{/each}
 	</select> -->
-  
+
 	<Select bind:selected={filter}>
-		<SelectTrigger class="w-32 flex border-none focus:ring-0 focus:ring-offset-0">
+		<SelectTrigger
+			class="w-32 flex border-none focus:ring-0 focus:ring-offset-0"
+			disabled={!$galleryStore.images.length}
+		>
 			<SelectValue class="text-base" placeholder="All photos"></SelectValue>
 		</SelectTrigger>
 		<SelectContent>
@@ -84,5 +87,4 @@
 			</SelectGroup>
 		</SelectContent>
 	</Select>
-
 </div>

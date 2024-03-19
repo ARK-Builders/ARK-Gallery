@@ -7,6 +7,7 @@
 	import { Slider } from '$lib/components/ui/slider'
 	import { onMount } from 'svelte'
 	import type { ImageType } from '$lib/utils/types'
+	import TagsList from '$lib/components/TagsList.svelte'
 
 	let images: ImageType[] = []
 
@@ -68,10 +69,6 @@
 	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
-
-	onMount(() => {
-		localStorage.setItem('tags', JSON.stringify(['one', 'two']))
-	})
 </script>
 
 <svelte:head>
@@ -82,6 +79,7 @@
 	<div>
 		<Filter />
 		<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
+		<TagsList />
 		<Gallery />
 	</div>
 	<div class="flex py-10 flex-row justify-end">
