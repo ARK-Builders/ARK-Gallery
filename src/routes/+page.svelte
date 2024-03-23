@@ -5,7 +5,7 @@
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
-	import { onMount } from 'svelte'
+	// import { onMount } from 'svelte'
 	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
 
@@ -13,6 +13,7 @@
 
 	const uploadFolder = async () => {
 		images = []
+		// galleryStore.reset()
 		$galleryStore.images = []
 		const filesDir: File[] = (await openDirectory()) as File[]
 
@@ -33,6 +34,7 @@
 						images.push({
 							id: makeid(5),
 							src: reader.result,
+							tag: '',
 							name,
 							size,
 							lastModified,
@@ -52,20 +54,11 @@
 
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
+			$galleryStore.questionModalProp = 'deleteImage'
 			$galleryStore.modalQuestion = 'Are you sure want to delete that image?'
 			$galleryStore.modal = true
 			return
 		}
-	}
-
-	$: if ($galleryStore.isDeleteImage == true) {
-		const idx = $galleryStore.images
-			.map((item: any) => item.id)
-			.indexOf($galleryStore.selectedImage?.id)
-		$galleryStore.images.splice(idx, 1)
-		$galleryStore.images = $galleryStore.images
-		$galleryStore.isDeleteImage = false
-		$galleryStore.selectedImage = null
 	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]

@@ -4,8 +4,8 @@
 
 	let tags: string[] = []
 	onMount(() => {
-		let tagsData = localStorage.getItem('tags') || ''
-		tags = JSON.parse(tagsData)
+		let tagsData = localStorage.getItem('tags')
+		tags = JSON.parse(tagsData || '{}')
 		// tags = [...tags, ...tags, ...tags, ...tags, ...tags, ...tags]
 		// tags = [...tags, ...tags, ...tags, ...tags, ...tags, ...tags]
 	})
