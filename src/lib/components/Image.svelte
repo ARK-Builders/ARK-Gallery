@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { galleryStore } from '$lib/store'
+	import { LocalStorageDB } from '$lib/utils/localstorage'
 	import type { ImageType } from '$lib/utils/types'
 	import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 	import Fa from 'svelte-fa'
 
 	export let image: ImageType
+
 	let hasHover = false
+	let typingTmr: number | undefined = undefined
 
 	$: imageHeight = $galleryStore.zoomLevel + 80
 
@@ -17,6 +20,22 @@
 			$galleryStore.modal = true
 			return
 		}
+	}
+
+	const handleKeyUp = () => {
+		clearTimeout(typingTmr)
+		typingTmr = setTimeout(() => {
+			console.log('saving tag')
+			const tags = new LocalStorageDB('tags')
+			if (tags.getAll() && tags.getAll().length) {
+				let allTags = tags.getAll()
+				allTags.push(image.tag)
+				tags.update(allTags)
+			} else {
+				tags.create([image.tag])
+			}
+			// console.log(tags.getAll())
+		}, 2000)
 	}
 </script>
 
@@ -45,6 +64,8 @@
 			<span class="absolute left-1 text-lg">#</span>
 			<input
 				bind:value={image.tag}
+				on:keyup={() => handleKeyUp()}
+				on:keydown={() => clearTimeout(typingTmr)}
 				type="text"
 				class="w-full py-1 pl-4 bg-transparent bottom-0 focus:outline-none"
 			/>
