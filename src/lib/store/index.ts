@@ -3,6 +3,9 @@ import type { ImageType } from '$lib/utils/types'
 
 const galleryInterface = {
 	images: [] as any[],
+	selectedFilteredImages: [] as any[],
+	tags: [] as string[],
+	selectedTag: '' as string,
 	fileInfos: [] as File[],
 	selectedImage: null as unknown as ImageType | null,
 	questionModalProp: '' as string,

@@ -25,16 +25,19 @@
 	const handleKeyUp = () => {
 		clearTimeout(typingTmr)
 		typingTmr = setTimeout(() => {
-			console.log('saving tag')
+			// console.log('saving tag')
 			const tags = new LocalStorageDB('tags')
+
 			if (tags.getAll() && tags.getAll().length) {
-				let allTags = tags.getAll()
-				allTags.push(image.tag)
-				tags.update(allTags)
+				let allTags = new Set(tags.getAll())
+				allTags.add(image.tag)
+				let tagsArray = Array.from(allTags)
+
+				tags.update(tagsArray)
+				$galleryStore.tags = tagsArray
 			} else {
 				tags.create([image.tag])
 			}
-			// console.log(tags.getAll())
 		}, 2000)
 	}
 </script>

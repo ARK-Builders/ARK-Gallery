@@ -1,4 +1,3 @@
-// CRUD operations class
 export class LocalStorageDB {
 	private storageKey: string
 
@@ -12,9 +11,9 @@ export class LocalStorageDB {
 	}
 
 	// Read operation (get all items)
-	getAll(): { [name: string]: any } {
+	getAll(): [string] {
 		const itemsString = localStorage.getItem(this.storageKey)
-		return itemsString ? JSON.parse(itemsString) : {}
+		return itemsString ? JSON.parse(itemsString) : []
 	}
 
 	// Update operation
@@ -23,11 +22,10 @@ export class LocalStorageDB {
 	}
 
 	// Delete operation
-	delete(name: string): void {
-		const items = this.getAll()
-		if (items.indexOf(name)) {
-			delete items[name]
-			localStorage.setItem(this.storageKey, JSON.stringify(items))
-		}
-	}
+	// delete(name: string): void {
+	// 	const items = this.getAll()
+	// 	if (items.indexOf(name)) {
+	// 		localStorage.setItem(this.storageKey, JSON.stringify(items))
+	// 	}
+	// }
 }
