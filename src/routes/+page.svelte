@@ -64,7 +64,6 @@
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 
 	$: if ($galleryStore.selectedTag) {
-		// TODO: Filter images here
 		if ($galleryStore.images.length) {
 			let filtered = $galleryStore.images.filter((image) => image.tag == $galleryStore.selectedTag)
 			$galleryStore.selectedFilteredImages = filtered

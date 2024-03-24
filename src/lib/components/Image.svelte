@@ -38,7 +38,7 @@
 			} else {
 				tags.create([image.tag])
 			}
-		}, 2000)
+		}, 1500)
 	}
 </script>
 

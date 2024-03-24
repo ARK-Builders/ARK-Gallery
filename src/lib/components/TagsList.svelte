@@ -7,8 +7,6 @@
 		let tagsData = localStorage.getItem('tags')
 		tags = JSON.parse(tagsData || '[]')
 		$galleryStore.tags = tags
-		// tags = [...tags, ...tags, ...tags, ...tags, ...tags, ...tags]
-		// tags = [...tags, ...tags, ...tags, ...tags, ...tags, ...tags]
 	})
 
 	const handleSelectTag = (tag: string) => {
