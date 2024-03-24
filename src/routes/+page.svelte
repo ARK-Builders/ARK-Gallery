@@ -6,7 +6,6 @@
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
 
-
 	let images: any = []
 
 	const uploadFolder = async () => {
@@ -67,7 +66,6 @@
 	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
-
 </script>
 
 <svelte:head>

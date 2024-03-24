@@ -9,8 +9,8 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check .",
-		"format": "prettier --write ."
+		"lint": "prettier --check ./src",
+		"format": "prettier --write ./src"
 	},
 	"devDependencies": {
 		"@fortawesome/free-regular-svg-icons": "^6.5.1",
