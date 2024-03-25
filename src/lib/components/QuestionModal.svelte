@@ -4,25 +4,15 @@
 	import { galleryStore } from '$lib/store'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { toast } from 'svelte-sonner'
-
-	let data: any
-	let disabled: boolean = false
+	import { LocalStorageDB } from '$lib/utils/localstorage'
 
 	const handleYes = () => {
 		if ($galleryStore.questionModalProp == 'deleteImage') {
-			const idx = $galleryStore.images
-				.map((item: any) => item.id)
-				.indexOf($galleryStore.selectedImage?.id)
-			$galleryStore.images.splice(idx, 1)
-			$galleryStore.images = $galleryStore.images
-			$galleryStore.questionModalProp = ''
-			$galleryStore.selectedImage = null
-			toast.info('Deleted Image Successfully')
+			deleteImage()
+		} else if ($galleryStore.questionModalProp == 'deleteTag') {
+			deleteTag()
 		} else if ($galleryStore.questionModalProp == 'removeTag') {
-			if ($galleryStore.selectedImage) {
-				$galleryStore.selectedImage.tag = ''
-				toast.info('Tag remvoed from Image')
-			}
+			removeTag()
 		}
 		$galleryStore.modal = false
 	}
@@ -30,6 +20,39 @@
 	const handleNo = () => {
 		$galleryStore.modal = false
 		$galleryStore.selectedImage = null
+	}
+
+	const deleteImage = () => {
+		const idx = $galleryStore.images
+			.map((item: any) => item.id)
+			.indexOf($galleryStore.selectedImage?.id)
+		$galleryStore.images.splice(idx, 1)
+		$galleryStore.images = $galleryStore.images
+		$galleryStore.questionModalProp = ''
+		$galleryStore.selectedImage = null
+		toast.info('Deleted Image Successfully')
+	}
+
+	const deleteTag = () => {
+		const inUse = $galleryStore.images.find((image) => image.tag == $galleryStore.selectedTag)
+		if (!inUse) {
+			const tags = new LocalStorageDB('tags')
+			tags.delete($galleryStore.selectedTag)
+			$galleryStore.tags = tags.getAll()
+			// resetting filtered images store
+			$galleryStore.selectedTag = ''
+			$galleryStore.selectedFilteredImages = []
+			toast.warning('Deleted Tag Successfully')
+		} else {
+			toast.warning("Can't delete! Tag is in use")
+		}
+	}
+
+	const removeTag = () => {
+		if ($galleryStore.selectedImage) {
+			$galleryStore.selectedImage.tag = ''
+			toast.info('Tag remvoed from Image')
+		}
 	}
 </script>
 

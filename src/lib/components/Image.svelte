@@ -14,7 +14,7 @@
 
 	const removeTag = (image: ImageType) => {
 		if (image.tag) {
-			$galleryStore.modalQuestion = 'Are you sure want to delete this tag?'
+			$galleryStore.modalQuestion = 'Are you sure want to remove this tag?'
 			$galleryStore.selectedImage = image
 			$galleryStore.questionModalProp = 'removeTag'
 			$galleryStore.modal = true

@@ -8,7 +8,6 @@
 	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
 	import { toast } from 'svelte-sonner'
-	import { LocalStorageDB } from '$lib/utils/localstorage'
 
 	let images: ImageType[] = []
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
@@ -65,18 +64,9 @@
 
 	const deleteTag = () => {
 		if ($galleryStore.selectedTag) {
-			const inUse = $galleryStore.images.find((image) => image.tag == $galleryStore.selectedTag)
-			if (!inUse) {
-				const tags = new LocalStorageDB('tags')
-				tags.delete($galleryStore.selectedTag)
-				$galleryStore.tags = tags.getAll()
-				// resetting filtered images store
-				$galleryStore.selectedTag = ''
-				$galleryStore.selectedFilteredImages = []
-				toast.warning('Deleted Tag Successfully')
-			} else {
-				toast.warning("Can't delete! Tag is in use")
-			}
+			$galleryStore.questionModalProp = 'deleteTag'
+			$galleryStore.modalQuestion = 'Are you sure want to delete that tag?'
+			$galleryStore.modal = true
 		}
 	}
 
