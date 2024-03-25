@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte'
 	import { galleryStore } from '$lib/store'
 	import Button from './ui/button/button.svelte'
-
+	import { toast } from 'svelte-sonner'
 
 	let data: any
 	let disabled: boolean = false
@@ -12,8 +12,9 @@
 	const handleYes = () => {
 		$galleryStore.isDeleteImage = true
 		$galleryStore.modal = false
-	}
 
+		toast.info('Deleted Image Successfully')
+	}
 </script>
 
 <div

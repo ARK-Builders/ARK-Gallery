@@ -5,7 +5,7 @@
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
-
+	import { toast } from 'svelte-sonner'
 
 	let images: any = []
 
@@ -20,6 +20,7 @@
 			filesDir.forEach((file) => {
 				if (file.type && !file.type.startsWith('image/')) {
 					console.log('File is not an image.', file.type, file)
+					toast.error('One of file is not an image')
 					return
 				}
 				var reader = new FileReader()
@@ -67,7 +68,6 @@
 	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
-
 </script>
 
 <svelte:head>

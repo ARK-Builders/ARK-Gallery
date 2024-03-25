@@ -26,7 +26,6 @@
 		let _images = $galleryStore.images
 
 		switch (filter.value) {
-
 			case 'date':
 				_images.sort((a: File, b: File) => {
 					return a.lastModified - b.lastModified
@@ -68,7 +67,7 @@
 			<option value={_filter}>By {_filter}</option>
 		{/each}
 	</select> -->
-  
+
 	<Select bind:selected={filter}>
 		<SelectTrigger class="w-32 flex border-none focus:ring-0 focus:ring-offset-0">
 			<SelectValue class="text-base" placeholder="All photos"></SelectValue>
@@ -84,5 +83,4 @@
 			</SelectGroup>
 		</SelectContent>
 	</Select>
-
 </div>
