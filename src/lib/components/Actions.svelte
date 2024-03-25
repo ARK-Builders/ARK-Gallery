@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { galleryStore } from '$lib/store'
-	import { faImage } from '@fortawesome/free-regular-svg-icons'
+	import { faImage, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 	import { faTag, faTrash } from '@fortawesome/free-solid-svg-icons'
 	import { Button } from '$lib/components/ui/button'
 	import Tooltip from '$lib/components/elements/Tooltip.svelte'
@@ -32,12 +32,24 @@
 		<p slot="tip-text">Select images folder</p>
 	</Tooltip>
 
+	<Tooltip hidden={!$galleryStore.selectedTag}>
+		<Button
+			slot="tip-trigger"
+			variant={'outline'}
+			on:click={() => dispatch('deleteTag')}
+			class="px-3 bg-gray-200 rounded-lg"
+		>
+			<Fa icon={faTrashAlt} />
+		</Button>
+		<p slot="tip-text">Delete tag</p>
+	</Tooltip>
+
 	<Tooltip>
 		<Button
 			slot="tip-trigger"
 			variant={'outline'}
 			disabled={!$galleryStore.selectedImage}
-			on:click={() => dispatch('delete')}
+			on:click={() => dispatch('deleteImage')}
 			class="px-3 bg-gray-200 rounded-lg {!hasImages ? 'hidden' : ''}"
 		>
 			<Fa icon={faTrash} />

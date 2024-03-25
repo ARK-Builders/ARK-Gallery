@@ -22,10 +22,12 @@ export class LocalStorageDB {
 	}
 
 	// Delete operation
-	// delete(name: string): void {
-	// 	const items = this.getAll()
-	// 	if (items.indexOf(name)) {
-	// 		localStorage.setItem(this.storageKey, JSON.stringify(items))
-	// 	}
-	// }
+	delete(name: string): void {
+		const items = this.getAll()
+
+		if (Array.isArray(items) && items.indexOf(name) > -1) {
+			items.splice(items.indexOf(name), 1)
+			localStorage.setItem(this.storageKey, JSON.stringify(items))
+		}
+	}
 }

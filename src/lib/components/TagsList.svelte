@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte'
 
 	let tags: string[] = []
+
 	onMount(() => {
 		let tagsData = localStorage.getItem('tags')
 		tags = JSON.parse(tagsData || '[]')

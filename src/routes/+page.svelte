@@ -8,8 +8,10 @@
 	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
 	import { toast } from 'svelte-sonner'
+	import { LocalStorageDB } from '$lib/utils/localstorage'
 
 	let images: ImageType[] = []
+	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 
 	const uploadFolder = async () => {
 		images = []
@@ -61,7 +63,22 @@
 		}
 	}
 
-	let zoomLevel: number[] = [$galleryStore.zoomLevel]
+	const deleteTag = () => {
+		if ($galleryStore.selectedTag) {
+			const inUse = $galleryStore.images.find((image) => image.tag == $galleryStore.selectedTag)
+			if (!inUse) {
+				const tags = new LocalStorageDB('tags')
+				tags.delete($galleryStore.selectedTag)
+				$galleryStore.tags = tags.getAll()
+				// resetting filtered images store
+				$galleryStore.selectedTag = ''
+				$galleryStore.selectedFilteredImages = []
+				toast.warning('Deleted Tag Successfully')
+			} else {
+				toast.warning("Can't delete! Tag is in use")
+			}
+		}
+	}
 
 	$: if ($galleryStore.selectedTag) {
 		if ($galleryStore.images.length) {
@@ -78,7 +95,11 @@
 <div class="flex flex-col justify-between max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
 	<div>
 		<Filter />
-		<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
+		<Actions
+			on:upload={() => uploadFolder()}
+			on:deleteImage={() => deleteImage()}
+			on:deleteTag={() => deleteTag()}
+		/>
 		<TagsList />
 		<Gallery />
 	</div>
