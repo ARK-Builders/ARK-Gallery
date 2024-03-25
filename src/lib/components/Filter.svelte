@@ -62,13 +62,6 @@
 <div class="flex flex-row items-center w-full rounded-full shadow-lg bg-white py-2 px-10">
 	<p>Show</p>
 
-	<!-- <select bind:value={filter} on:change={() => updateFilter()} class="outline-none px-1 pb-[1px]">
-		<option value="">All photos</option>
-		{#each filters as _filter}
-			<option value={_filter}>By {_filter}</option>
-		{/each}
-	</select> -->
-
 	<Select bind:selected={filter}>
 		<SelectTrigger
 			class="w-32 flex border-none focus:ring-0 focus:ring-offset-0"

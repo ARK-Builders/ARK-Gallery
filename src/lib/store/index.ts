@@ -16,12 +16,3 @@ const galleryInterface = {
 }
 
 export const galleryStore = writable(galleryInterface)
-
-// export const galleryStore = {
-// 	subscribe: store.subscribe,
-// 	set: store.set,
-// 	update: store.update,
-// 	reset: () => {
-// 		store.set(JSON.parse(JSON.stringify(galleryInterface)))
-// 	}
-// }

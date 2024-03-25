@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { faMultiply } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
-	// import { onMount } from 'svelte'
 	import { galleryStore } from '$lib/store'
 	import Button from '$lib/components/ui/button/button.svelte'
 
@@ -21,8 +20,6 @@
 			if ($galleryStore.selectedImage) {
 				$galleryStore.selectedImage.tag = ''
 			}
-
-			console.log('delete tag')
 		}
 		$galleryStore.modal = false
 	}

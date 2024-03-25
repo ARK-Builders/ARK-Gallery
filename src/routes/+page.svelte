@@ -5,7 +5,6 @@
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
-	// import { onMount } from 'svelte'
 	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
 
@@ -13,7 +12,6 @@
 
 	const uploadFolder = async () => {
 		images = []
-		// galleryStore.reset()
 		$galleryStore.images = []
 		const filesDir: File[] = (await openDirectory()) as File[]
 

@@ -25,7 +25,6 @@
 	const handleKeyUp = () => {
 		clearTimeout(typingTmr)
 		typingTmr = setTimeout(() => {
-			// console.log('saving tag')
 			const tags = new LocalStorageDB('tags')
 
 			if (tags.getAll() && tags.getAll().length) {
