@@ -30,7 +30,7 @@
 		$galleryStore.images = $galleryStore.images
 		$galleryStore.questionModalProp = ''
 		$galleryStore.selectedImage = null
-		toast.info('Deleted Image Successfully')
+		toast.success('Deleted Image Successfully')
 	}
 
 	const deleteTag = () => {
@@ -42,7 +42,7 @@
 			// resetting filtered images store
 			$galleryStore.selectedTag = ''
 			$galleryStore.selectedFilteredImages = []
-			toast.warning('Deleted Tag Successfully')
+			toast.success('Deleted Tag Successfully')
 		} else {
 			toast.warning("Can't delete! Tag is in use")
 		}
