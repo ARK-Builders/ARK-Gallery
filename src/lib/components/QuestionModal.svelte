@@ -3,6 +3,7 @@
 	import Fa from 'svelte-fa'
 	import { galleryStore } from '$lib/store'
 	import Button from '$lib/components/ui/button/button.svelte'
+	import { toast } from 'svelte-sonner'
 
 	let data: any
 	let disabled: boolean = false
@@ -16,9 +17,11 @@
 			$galleryStore.images = $galleryStore.images
 			$galleryStore.questionModalProp = ''
 			$galleryStore.selectedImage = null
+			toast.info('Deleted Image Successfully')
 		} else if ($galleryStore.questionModalProp == 'deleteTag') {
 			if ($galleryStore.selectedImage) {
 				$galleryStore.selectedImage.tag = ''
+				toast.info('Tag remvoed from Image')
 			}
 		}
 		$galleryStore.modal = false

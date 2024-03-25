@@ -7,6 +7,7 @@
 	import { Slider } from '$lib/components/ui/slider'
 	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
+	import { toast } from 'svelte-sonner'
 
 	let images: ImageType[] = []
 
@@ -21,6 +22,7 @@
 			filesDir.forEach((file) => {
 				if (file.type && !file.type.startsWith('image/')) {
 					console.log('File is not an image.', file.type, file)
+					toast.error('One of file is not an image')
 					return
 				}
 				var reader = new FileReader()
