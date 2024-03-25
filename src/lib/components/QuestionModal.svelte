@@ -18,7 +18,7 @@
 			$galleryStore.questionModalProp = ''
 			$galleryStore.selectedImage = null
 			toast.info('Deleted Image Successfully')
-		} else if ($galleryStore.questionModalProp == 'deleteTag') {
+		} else if ($galleryStore.questionModalProp == 'removeTag') {
 			if ($galleryStore.selectedImage) {
 				$galleryStore.selectedImage.tag = ''
 				toast.info('Tag remvoed from Image')

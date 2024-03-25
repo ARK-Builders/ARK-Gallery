@@ -12,11 +12,11 @@
 
 	$: imageHeight = $galleryStore.zoomLevel + 80
 
-	const deleteTag = (image: ImageType) => {
+	const removeTag = (image: ImageType) => {
 		if (image.tag) {
 			$galleryStore.modalQuestion = 'Are you sure want to delete this tag?'
 			$galleryStore.selectedImage = image
-			$galleryStore.questionModalProp = 'deleteTag'
+			$galleryStore.questionModalProp = 'removeTag'
 			$galleryStore.modal = true
 			return
 		}
@@ -72,7 +72,7 @@
 				class="w-full py-1 pl-4 bg-transparent bottom-0 focus:outline-none"
 			/>
 			<button
-				on:click={() => deleteTag(image)}
+				on:click={() => removeTag(image)}
 				class:hidden={!image.tag}
 				class="absolute right-1 text-white"
 			>
