@@ -5,9 +5,12 @@
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
+	import type { ImageType } from '$lib/utils/types'
+	import TagsList from '$lib/components/TagsList.svelte'
 	import { toast } from 'svelte-sonner'
 
-	let images: any = []
+	let images: ImageType[] = []
+	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 
 	const uploadFolder = async () => {
 		images = []
@@ -32,6 +35,7 @@
 						images.push({
 							id: makeid(5),
 							src: reader.result,
+							tag: '',
 							name,
 							size,
 							lastModified,
@@ -51,23 +55,27 @@
 
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
+			$galleryStore.questionModalProp = 'deleteImage'
 			$galleryStore.modalQuestion = 'Are you sure want to delete that image?'
 			$galleryStore.modal = true
 			return
 		}
 	}
 
-	$: if ($galleryStore.isDeleteImage == true) {
-		const idx = $galleryStore.images
-			.map((item: any) => item.id)
-			.indexOf($galleryStore.selectedImage?.id)
-		$galleryStore.images.splice(idx, 1)
-		$galleryStore.images = $galleryStore.images
-		$galleryStore.isDeleteImage = false
-		$galleryStore.selectedImage = null
+	const deleteTag = () => {
+		if ($galleryStore.selectedTag) {
+			$galleryStore.questionModalProp = 'deleteTag'
+			$galleryStore.modalQuestion = 'Are you sure want to delete that tag?'
+			$galleryStore.modal = true
+		}
 	}
 
-	let zoomLevel: number[] = [$galleryStore.zoomLevel]
+	$: if ($galleryStore.selectedTag) {
+		if ($galleryStore.images.length) {
+			let filtered = $galleryStore.images.filter((image) => image.tag == $galleryStore.selectedTag)
+			$galleryStore.selectedFilteredImages = filtered
+		}
+	}
 </script>
 
 <svelte:head>
@@ -77,7 +85,12 @@
 <div class="flex flex-col justify-between max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
 	<div>
 		<Filter />
-		<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
+		<Actions
+			on:upload={() => uploadFolder()}
+			on:deleteImage={() => deleteImage()}
+			on:deleteTag={() => deleteTag()}
+		/>
+		<TagsList />
 		<Gallery />
 	</div>
 	<div class="flex py-10 flex-row justify-end">
