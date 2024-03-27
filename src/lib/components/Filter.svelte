@@ -68,7 +68,12 @@
 			class="w-32 flex border-none focus:ring-0 focus:ring-offset-0"
 			disabled={!$galleryStore.images.length}
 		>
-			<div class="w-28 px-2 cursor-pointer text-base" use:builder.action {...builder}>
+			<div
+				class="w-28 px-2 cursor-pointer text-base
+				{!$galleryStore.images.length && 'pointer-events-none opacity-70'}"
+				use:builder.action
+				{...builder}
+			>
 				{filter.value != '' ? 'By ' + filter.value : 'All Photos'}
 			</div>
 		</SelectTrigger>
