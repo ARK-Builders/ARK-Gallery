@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { galleryStore } from '$lib/store'
-	import { faImage } from '@fortawesome/free-regular-svg-icons'
+	import { faImage, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 	import { faTag, faTrash } from '@fortawesome/free-solid-svg-icons'
+	import { Button } from '$lib/components/ui/button'
+	import Tooltip from '$lib/components/elements/Tooltip.svelte'
 	import { createEventDispatcher } from 'svelte'
 	import Fa from 'svelte-fa'
-
-	import { Button } from '$lib/components/ui/button'
-	import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 	const dispatch = createEventDispatcher()
 	$: hasImages = $galleryStore.images?.length
@@ -22,23 +21,39 @@
 		<span>Add tag to image</span>
 	</Button>
 	<Tooltip>
-		<TooltipTrigger>
-			<Button
-				on:click={() => dispatch('upload')}
-				class="flex flex-row items-center text-white gap-2 rounded-xl bg-blue-400 hover:bg-blue-600 px-4 py-2"
-			>
-				<Fa icon={faImage} />
-				<span>Select images</span>
-			</Button>
-		</TooltipTrigger>
+		<Button
+			slot="tip-trigger"
+			on:click={() => dispatch('upload')}
+			class="flex flex-row items-center text-white gap-2 rounded-xl bg-blue-400 hover:bg-blue-600 px-4 py-2"
+		>
+			<Fa icon={faImage} />
+			<span>Select images</span>
+		</Button>
+		<p slot="tip-text">Select images folder</p>
 	</Tooltip>
 
-	<Button
-		variant={'outline'}
-		disabled={!$galleryStore.selectedImage}
-		on:click={() => dispatch('delete')}
-		class="px-3 bg-gray-200 rounded-lg {!hasImages ? 'hidden' : ''}"
-	>
-		<Fa icon={faTrash} />
-	</Button>
+	<Tooltip hidden={!$galleryStore.selectedTag}>
+		<Button
+			slot="tip-trigger"
+			variant={'outline'}
+			on:click={() => dispatch('deleteTag')}
+			class="px-3 bg-gray-200 rounded-lg"
+		>
+			<Fa icon={faTrashAlt} />
+		</Button>
+		<p slot="tip-text">Delete tag</p>
+	</Tooltip>
+
+	<Tooltip>
+		<Button
+			slot="tip-trigger"
+			variant={'outline'}
+			disabled={!$galleryStore.selectedImage}
+			on:click={() => dispatch('deleteImage')}
+			class="px-3 bg-gray-200 rounded-lg {!hasImages ? 'hidden' : ''}"
+		>
+			<Fa icon={faTrash} />
+		</Button>
+		<p slot="tip-text">Delete image</p>
+	</Tooltip>
 </div>

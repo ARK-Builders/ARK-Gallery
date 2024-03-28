@@ -6,10 +6,9 @@
 		SelectGroup,
 		SelectItem,
 		SelectLabel,
-		SelectTrigger,
-		SelectValue
+		SelectTrigger
 	} from '$lib/components/ui/select'
-	import type { Selected } from 'bits-ui'
+	import { type Selected } from 'bits-ui'
 
 	export let filter: Selected<string> = { value: '' }
 
@@ -24,9 +23,9 @@
 
 	const updateFilter = async () => {
 		let _images = $galleryStore.images
+		$galleryStore.activeFilter = filter.value
 
 		switch (filter.value) {
-
 			case 'date':
 				_images.sort((a: File, b: File) => {
 					return a.lastModified - b.lastModified
@@ -59,30 +58,34 @@
 	$: filter, updateFilter()
 </script>
 
-<div class="flex flex-row items-center w-full rounded-full shadow-lg bg-white py-2 px-10">
-	<p>Show</p>
+<div class="flex flex-row items-center w-full rounded-full shadow-lg bg-white py-3 px-10">
+	<p>Show:</p>
 
-	<!-- <select bind:value={filter} on:change={() => updateFilter()} class="outline-none px-1 pb-[1px]">
-		<option value="">All photos</option>
-		{#each filters as _filter}
-			<option value={_filter}>By {_filter}</option>
-		{/each}
-	</select> -->
-  
 	<Select bind:selected={filter}>
-		<SelectTrigger class="w-32 flex border-none focus:ring-0 focus:ring-offset-0">
-			<SelectValue class="text-base" placeholder="All photos"></SelectValue>
+		<SelectTrigger
+			asChild
+			let:builder
+			class="w-32 flex border-none focus:ring-0 focus:ring-offset-0"
+			disabled={!$galleryStore.images.length}
+		>
+			<div
+				class="w-28 px-2 cursor-pointer text-base
+				{!$galleryStore.images.length && 'pointer-events-none opacity-70'}"
+				use:builder.action
+				{...builder}
+			>
+				{filter.value != '' ? 'By ' + filter.value : 'All Photos'}
+			</div>
 		</SelectTrigger>
 		<SelectContent>
 			<SelectGroup>
 				<SelectLabel class="pl-7">All photos</SelectLabel>
 				{#each filters as filter}
 					<SelectItem class="cursor-pointer" value={filter.value} label={filter.label}
-						>by {filter.label}</SelectItem
+						>By {filter.label}</SelectItem
 					>
 				{/each}
 			</SelectGroup>
 		</SelectContent>
 	</Select>
-
 </div>

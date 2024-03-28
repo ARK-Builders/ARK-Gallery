@@ -61,20 +61,19 @@
 
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
+			$galleryStore.questionModalProp = 'deleteImage'
 			$galleryStore.modalQuestion = 'Are you sure want to delete that image?'
 			$galleryStore.modal = true
 			return
 		}
 	}
 
-	$: if ($galleryStore.isDeleteImage == true) {
-		const idx = $galleryStore.images
-			.map((item: any) => item.id)
-			.indexOf($galleryStore.selectedImage?.id)
-		$galleryStore.images.splice(idx, 1)
-		$galleryStore.images = $galleryStore.images
-		$galleryStore.isDeleteImage = false
-		$galleryStore.selectedImage = null
+	const deleteTag = () => {
+		if ($galleryStore.selectedTag) {
+			$galleryStore.questionModalProp = 'deleteTag'
+			$galleryStore.modalQuestion = 'Are you sure want to delete that tag?'
+			$galleryStore.modal = true
+		}
 	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
@@ -87,7 +86,12 @@
 <div class="flex flex-col justify-between max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
 	<div>
 		<Filter />
-		<Actions on:upload={() => uploadFolder()} on:delete={() => deleteImage()} />
+		<Actions
+			on:upload={() => uploadFolder()}
+			on:deleteImage={() => deleteImage()}
+			on:deleteTag={() => deleteTag()}
+		/>
+		<TagsList />
 		<Gallery />
 	</div>
 	<div class="flex py-10 flex-row justify-end">
