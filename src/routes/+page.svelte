@@ -5,51 +5,57 @@
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
-	import type { ImageType } from '$lib/utils/types'
-	import TagsList from '$lib/components/TagsList.svelte'
-	import { toast } from 'svelte-sonner'
+	import { open } from '@tauri-apps/api/dialog'
+	import { readBinaryFile } from '@tauri-apps/api/fs'
+	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
+	import { CloudCog } from 'lucide-svelte'
 
-	let images: ImageType[] = []
-	let zoomLevel: number[] = [$galleryStore.zoomLevel]
+	let images: any = []
 
 	const uploadFolder = async () => {
-		images = []
-		$galleryStore.images = []
-		const filesDir: File[] = (await openDirectory()) as File[]
-
-		$galleryStore.fileInfos = filesDir
-
-		if (filesDir && filesDir.length) {
-			filesDir.forEach((file) => {
-				if (file.type && !file.type.startsWith('image/')) {
-					console.log('File is not an image.', file.type, file)
-					toast.error('One of file is not an image')
-					return
+		let selected = await open({
+			multiple: true,
+			filters: [
+				{
+					name: 'Image',
+					extensions: ['png', 'jpeg', 'jpg', 'gif', 'webp']
 				}
-				var reader = new FileReader()
+			]
+		})
 
-				reader.addEventListener(
-					'load',
-					function () {
-						let { name, size, lastModified, type } = file
-						images.push({
-							id: makeid(5),
-							src: reader.result,
-							tag: '',
-							name,
-							size,
-							lastModified,
-							type
-						})
-						$galleryStore.images = images
-					},
-					false
-				)
+		if (!Array.isArray(selected)) {
+			if (!selected) {
+				selected = []
+			} else {
+				selected = [selected]
+			}
+		}
 
-				if (file) {
-					reader.readAsDataURL(file)
-				}
-			})
+		if (Array.isArray(selected)) {
+			const output = await Promise.allSettled(
+				selected.map(async (file) => {
+					const metadata: {
+						file_type: string
+						file_size: number
+						created_time: string
+						modified_time: string
+						accessed_time: string
+					} = await invoke('get_file_metadata', { filePath: file })
+
+					return {
+						id: makeid(5),
+						src: convertFileSrc(file),
+						name: file,
+						size: metadata.file_size,
+						lastModified: metadata.modified_time,
+						type: metadata.file_type
+					}
+				})
+			)
+
+			$galleryStore.images = output
+				.filter((item) => item.status === 'fulfilled')
+				.map((item) => item.value)
 		}
 	}
 
@@ -70,12 +76,7 @@
 		}
 	}
 
-	$: if ($galleryStore.selectedTag) {
-		if ($galleryStore.images.length) {
-			let filtered = $galleryStore.images.filter((image) => image.tag == $galleryStore.selectedTag)
-			$galleryStore.selectedFilteredImages = filtered
-		}
-	}
+	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 </script>
 
 <svelte:head>
