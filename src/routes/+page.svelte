@@ -57,7 +57,7 @@
 			filters: [
 				{
 					name: 'Image',
-					extensions: ['png', 'jpeg']
+					extensions: ['png', 'jpeg', 'jpg', 'gif', 'webp']
 				}
 			]
 		})
