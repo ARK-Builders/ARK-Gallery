@@ -5,11 +5,14 @@
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
-
+	import { open } from '@tauri-apps/api/dialog'
+	import { readBinaryFile } from '@tauri-apps/api/fs'
+	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
+	import { CloudCog } from 'lucide-svelte'
 
 	let images: any = []
 
-	const uploadFolder = async () => {
+	const uploadFolder2 = async () => {
 		images = []
 		$galleryStore.images = []
 		const filesDir: File[] = (await openDirectory()) as File[]
@@ -48,6 +51,53 @@
 		}
 	}
 
+	const uploadFolder = async () => {
+		let selected = await open({
+			multiple: true,
+			filters: [
+				{
+					name: 'Image',
+					extensions: ['png', 'jpeg']
+				}
+			]
+		})
+
+		if (!Array.isArray(selected)) {
+			if (!selected) {
+				selected = []
+			} else {
+				selected = [selected]
+			}
+		}
+
+		if (Array.isArray(selected)) {
+			const output = await Promise.allSettled(
+				selected.map(async (file) => {
+					const metadata: {
+						file_type: string
+						file_size: number
+						created_time: string
+						modified_time: string
+						accessed_time: string
+					} = await invoke('get_file_metadata', { filePath: file })
+
+					return {
+						id: makeid(5),
+						src: convertFileSrc(file),
+						name: file,
+						size: metadata.file_size,
+						lastModified: metadata.modified_time,
+						type: metadata.file_type
+					}
+				})
+			)
+
+			$galleryStore.images = output
+				.filter((item) => item.status === 'fulfilled')
+				.map((item) => item.value)
+		}
+	}
+
 	const deleteImage = () => {
 		if ($galleryStore.selectedImage) {
 			$galleryStore.modalQuestion = 'Are you sure want to delete that image?'
@@ -67,7 +117,6 @@
 	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
-
 </script>
 
 <svelte:head>
