@@ -12,45 +12,6 @@
 
 	let images: any = []
 
-	const uploadFolder2 = async () => {
-		images = []
-		$galleryStore.images = []
-		const filesDir: File[] = (await openDirectory()) as File[]
-
-		$galleryStore.fileInfos = filesDir
-
-		if (filesDir && filesDir.length) {
-			filesDir.forEach((file) => {
-				if (file.type && !file.type.startsWith('image/')) {
-					console.log('File is not an image.', file.type, file)
-					return
-				}
-				var reader = new FileReader()
-
-				reader.addEventListener(
-					'load',
-					function () {
-						let { name, size, lastModified, type } = file
-						images.push({
-							id: makeid(5),
-							src: reader.result,
-							name,
-							size,
-							lastModified,
-							type
-						})
-						$galleryStore.images = images
-					},
-					false
-				)
-
-				if (file) {
-					reader.readAsDataURL(file)
-				}
-			})
-		}
-	}
-
 	const uploadFolder = async () => {
 		let selected = await open({
 			multiple: true,
