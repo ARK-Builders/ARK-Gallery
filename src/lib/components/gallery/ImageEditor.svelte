@@ -4,7 +4,7 @@
 	import Fa from 'svelte-fa'
 </script>
 
-<div class="flex flex-row gap-4 mx-auto w-full max-w-7xl py-12 h-[75vh]">
+<div class="flex flex-row gap-6 mx-auto w-full max-w-7xl py-12 h-[75vh]">
 	<div class="flex flex-col w-36 py-5 gap-3 bg-white rounded-xl shadow-lg">
 		<button class="flex flex-col gap-1 items-center">
 			<Fa icon={faRotateLeft} />

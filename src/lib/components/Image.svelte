@@ -41,8 +41,11 @@
 	}
 
 	const openImage = () => {
-		$galleryStore.galleryView = true
-		console.log($galleryStore.selectedImage)
+		if ($galleryStore.selectedImage) {
+			$galleryStore.galleryView = true
+			$galleryStore.viewedImages.push($galleryStore.selectedImage)
+			$galleryStore = $galleryStore
+		}
 	}
 </script>
 

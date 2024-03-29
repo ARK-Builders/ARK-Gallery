@@ -13,7 +13,8 @@ const galleryInterface = {
 	modalQuestion: '' as string,
 	zoomLevel: 100 as number,
 	activeFilter: '',
-	galleryView: false as boolean
+	galleryView: false as boolean,
+	viewedImages: [] as ImageType[]
 }
 
 export const galleryStore = writable(galleryInterface)
