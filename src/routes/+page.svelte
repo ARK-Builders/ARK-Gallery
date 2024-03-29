@@ -4,14 +4,14 @@
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
 	import { galleryStore } from '$lib/store'
-	import { Slider } from '$lib/components/ui/slider'
 	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
 	import { toast } from 'svelte-sonner'
 	import Header from '$lib/components/gallery/Header.svelte'
+	import Footer from '$lib/components/Footer.svelte'
+	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
 
 	let images: ImageType[] = []
-	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 
 	const uploadFolder = async () => {
 		images = []
@@ -96,15 +96,7 @@
 	</div>
 	<div class:hidden={!$galleryStore.galleryView}>
 		<Header />
+		<ImageEditor />
 	</div>
-	<div class="flex flex-row justify-end py-10">
-		<Slider
-			bind:value={zoomLevel}
-			onValueChange={(e) => ($galleryStore.zoomLevel = e[0])}
-			class="w-80"
-			max={130}
-			min={80}
-			step={1}
-		/>
-	</div>
+	<Footer />
 </div>
