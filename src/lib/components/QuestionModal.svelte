@@ -5,6 +5,8 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { toast } from 'svelte-sonner'
 	import { LocalStorageDB } from '$lib/utils/localstorage'
+	import { removeImageFromTab } from '$lib/actions'
+	import type { ImageType } from '$lib/utils/types'
 
 	const handleYes = () => {
 		if ($galleryStore.questionModalProp == 'deleteImage') {
@@ -19,7 +21,9 @@
 
 	const handleNo = () => {
 		$galleryStore.modal = false
-		$galleryStore.selectedImage = null
+		if (!$galleryStore.galleryView) {
+			$galleryStore.selectedImage = null
+		}
 	}
 
 	const deleteImage = () => {
@@ -29,7 +33,17 @@
 		$galleryStore.images.splice(idx, 1)
 		$galleryStore.images = $galleryStore.images
 		$galleryStore.questionModalProp = ''
-		$galleryStore.selectedImage = null
+
+		if ($galleryStore.galleryView) {
+			if ($galleryStore.viewedImages.length) {
+				removeImageFromTab($galleryStore.selectedImage as ImageType)
+				$galleryStore.selectedImage = $galleryStore.viewedImages[0]
+			} else {
+				$galleryStore.galleryView = false
+			}
+		} else {
+			$galleryStore.selectedImage = null
+		}
 		toast.success('Deleted Image Successfully')
 	}
 

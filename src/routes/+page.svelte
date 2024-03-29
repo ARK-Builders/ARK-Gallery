@@ -10,6 +10,7 @@
 	import Header from '$lib/components/gallery/Header.svelte'
 	import Footer from '$lib/components/Footer.svelte'
 	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
+	import { askDeleteImage, askDeleteTag } from '$lib/actions'
 
 	let images: ImageType[] = []
 
@@ -54,23 +55,6 @@
 		}
 	}
 
-	const deleteImage = () => {
-		if ($galleryStore.selectedImage) {
-			$galleryStore.questionModalProp = 'deleteImage'
-			$galleryStore.modalQuestion = 'Are you sure want to delete that image?'
-			$galleryStore.modal = true
-			return
-		}
-	}
-
-	const deleteTag = () => {
-		if ($galleryStore.selectedTag) {
-			$galleryStore.questionModalProp = 'deleteTag'
-			$galleryStore.modalQuestion = 'Are you sure want to delete that tag?'
-			$galleryStore.modal = true
-		}
-	}
-
 	$: if ($galleryStore.selectedTag) {
 		if ($galleryStore.images.length) {
 			let filtered = $galleryStore.images.filter((image) => image.tag == $galleryStore.selectedTag)
@@ -90,8 +74,8 @@
 		<Filter />
 		<Actions
 			on:upload={() => uploadFolder()}
-			on:deleteImage={() => deleteImage()}
-			on:deleteTag={() => deleteTag()}
+			on:deleteImage={() => askDeleteImage()}
+			on:deleteTag={() => askDeleteTag()}
 		/>
 		<TagsList />
 		<Gallery />

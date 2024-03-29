@@ -10,8 +10,12 @@
 	} from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 	import Tooltip from '$lib/components/elements/Tooltip.svelte'
+	import { createEventDispatcher } from 'svelte'
+	import { askDeleteImage, removeImageFromTab } from '$lib/actions'
 
 	export let showInfo = false
+
+	const dispatch = createEventDispatcher()
 </script>
 
 <div class="flex flex-col">
@@ -34,7 +38,7 @@
 								{viewedImage.name}
 							</span>
 							<button
-								on:click|stopPropagation={() => console.log('close')}
+								on:click|stopPropagation={() => removeImageFromTab(viewedImage)}
 								class="absolute top-1 right-1"
 							>
 								<Fa icon={faMultiply} size=".8x" />
@@ -57,7 +61,7 @@
 			<button on:click={() => (showInfo = !showInfo)}>
 				<Fa icon={faInfoCircle} />
 			</button>
-			<button>
+			<button on:click={() => askDeleteImage()}>
 				<Fa icon={faTrashAlt} />
 			</button>
 		</div>
