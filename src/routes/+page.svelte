@@ -77,6 +77,8 @@
 			$galleryStore.selectedFilteredImages = filtered
 		}
 	}
+
+	let showInfo = false
 </script>
 
 <svelte:head>
@@ -95,8 +97,8 @@
 		<Gallery />
 	</div>
 	<div class:hidden={!$galleryStore.galleryView}>
-		<Header />
-		<ImageEditor />
+		<Header bind:showInfo />
+		<ImageEditor bind:showInfo />
 	</div>
 	<Footer />
 </div>

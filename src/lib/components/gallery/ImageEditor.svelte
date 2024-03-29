@@ -2,6 +2,9 @@
 	import { galleryStore } from '$lib/store'
 	import { faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
+	import ImageDetails from '$lib/components/gallery/ImageDetails.svelte'
+
+	export let showInfo = false
 </script>
 
 <div class="flex flex-row gap-6 mx-auto w-full max-w-7xl py-12 h-[75vh]">
@@ -25,4 +28,8 @@
 			/>
 		{/if}
 	</div>
+
+	{#if showInfo}
+		<ImageDetails />
+	{/if}
 </div>
