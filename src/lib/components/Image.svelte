@@ -39,6 +39,11 @@
 			}
 		}, 1500)
 	}
+
+	const openImage = () => {
+		$galleryStore.galleryView = true
+		console.log($galleryStore.selectedImage)
+	}
 </script>
 
 <div
@@ -50,6 +55,7 @@
 	style="height: {imageHeight}px;"
 >
 	<button
+		on:dblclick={() => openImage()}
 		on:click={() => ($galleryStore.selectedImage = image)}
 		class:outline={$galleryStore.selectedImage == image}
 		class="w-full h-full rounded-md hover:outline outline-blue-200"

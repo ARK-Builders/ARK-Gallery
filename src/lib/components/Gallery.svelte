@@ -34,7 +34,6 @@
 
 {#if $galleryStore.images?.length}
 	<div
-		bind:this={imgContainerRef}
 		class="gap-3 max-h-[60vh] overflow-auto
 		{noImage
 			? 'flex flex-col gap-5 items-center w-full justify-center'

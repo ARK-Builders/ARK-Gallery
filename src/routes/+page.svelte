@@ -8,6 +8,7 @@
 	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
 	import { toast } from 'svelte-sonner'
+	import Header from '$lib/components/gallery/Header.svelte'
 
 	let images: ImageType[] = []
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
@@ -82,8 +83,8 @@
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
 
-<div class="flex flex-col justify-between max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
-	<div>
+<div class="mx-auto flex h-screen w-full flex-col justify-between rounded-md">
+	<div class:hidden={$galleryStore.galleryView} class="mx-auto w-full max-w-7xl p-5">
 		<Filter />
 		<Actions
 			on:upload={() => uploadFolder()}
@@ -93,7 +94,10 @@
 		<TagsList />
 		<Gallery />
 	</div>
-	<div class="flex py-10 flex-row justify-end">
+	<div class:hidden={!$galleryStore.galleryView}>
+		<Header />
+	</div>
+	<div class="flex flex-row justify-end py-10">
 		<Slider
 			bind:value={zoomLevel}
 			onValueChange={(e) => ($galleryStore.zoomLevel = e[0])}
