@@ -6,11 +6,8 @@
 	import { galleryStore } from '$lib/store'
 	import { Slider } from '$lib/components/ui/slider'
 	import { open } from '@tauri-apps/api/dialog'
-	import { readBinaryFile } from '@tauri-apps/api/fs'
 	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
-	import { CloudCog } from 'lucide-svelte'
-
-	let images: any = []
+	import TagsList from '$lib/components/TagsList.svelte'
 
 	const uploadFolder = async () => {
 		let selected = await open({
