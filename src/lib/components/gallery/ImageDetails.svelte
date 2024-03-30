@@ -5,8 +5,8 @@
 	import Fa from 'svelte-fa'
 </script>
 
-<div class="flex flex-col w-56 px-6 py-5 gap-5 bg-white rounded-xl shadow-lg">
-	<div class="flex flex-col gap-3 border-b-2 w-full pb-1 border-gray-500">
+<div class="flex w-56 flex-col gap-5 rounded-xl bg-white px-6 py-5 shadow-lg">
+	<div class="flex w-full flex-col gap-3 border-b-2 border-gray-500 pb-1">
 		<p class="flex items-center gap-3">
 			<Fa icon={faCalendarAlt} />
 			Date
@@ -15,7 +15,7 @@
 			{$galleryStore.selectedImage?.lastModified}
 		</p>
 	</div>
-	<div class="flex flex-col gap-3 border-b-2 w-full border-gray-500 pb-1">
+	<div class="flex w-full flex-col gap-3 border-b-2 border-gray-500 pb-1">
 		<p class="flex items-center gap-3">
 			<Fa icon={faTag} />
 			Tag
@@ -24,7 +24,7 @@
 			{$galleryStore.selectedImage?.tag}
 		</p>
 	</div>
-	<div class="flex flex-col gap-3 border-b-2 w-full border-gray-500 pb-1">
+	<div class="flex w-full flex-col gap-3 border-b-2 border-gray-500 pb-1">
 		<p class="flex items-center gap-3">
 			<Fa icon={faListNumeric} />
 			Size
@@ -33,7 +33,7 @@
 			{$galleryStore.selectedImage?.size}
 		</p>
 	</div>
-	<div class="flex flex-col gap-3 border-b-2 w-full border-gray-500 pb-1">
+	<div class="flex w-full flex-col gap-3 border-b-2 border-gray-500 pb-1">
 		<p class="flex items-center gap-3">
 			<Fa icon={faFileAlt} />
 			Format

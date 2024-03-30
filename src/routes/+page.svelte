@@ -10,7 +10,7 @@
 	import Header from '$lib/components/gallery/Header.svelte'
 	import Footer from '$lib/components/Footer.svelte'
 	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
-	import { askDeleteImage, askDeleteTag } from '$lib/actions'
+	import { askDeleteImage, askDeleteTag, filterImageWithTag } from '$lib/actions'
 
 	let images: ImageType[] = []
 
@@ -56,10 +56,7 @@
 	}
 
 	$: if ($galleryStore.selectedTag) {
-		if ($galleryStore.images.length) {
-			let filtered = $galleryStore.images.filter((image) => image.tag == $galleryStore.selectedTag)
-			$galleryStore.selectedFilteredImages = filtered
-		}
+		filterImageWithTag()
 	}
 
 	let showInfo = false

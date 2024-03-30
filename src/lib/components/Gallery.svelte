@@ -34,9 +34,9 @@
 
 {#if $galleryStore.images?.length}
 	<div
-		class="gap-3 max-h-[60vh] overflow-auto
+		class="max-h-[60vh] gap-3 overflow-auto
 		{noImage
-			? 'flex flex-col gap-5 items-center w-full justify-center'
+			? 'flex w-full flex-col items-center justify-center gap-5'
 			: 'grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6'}"
 	>
 		{#if noImage}

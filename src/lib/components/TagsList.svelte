@@ -20,13 +20,13 @@
 	}
 </script>
 
-<div class="flex flex-row flex-wrap gap-3 items-center my-5">
+<div class="my-5 flex flex-row flex-wrap items-center gap-3">
 	{#if $galleryStore.activeFilter == 'tag' && $galleryStore.tags.length}
 		{#each $galleryStore.tags as tag}
 			<button
 				on:click={() => handleSelectTag(tag)}
-				class="h-9 flex items-center px-3 rounded border border-[#94A3B8]
-				{$galleryStore.selectedTag == tag ? 'text-white bg-blue-400' : ''}"
+				class="flex h-9 items-center rounded border border-[#94A3B8] px-3
+				{$galleryStore.selectedTag == tag ? 'bg-blue-400 text-white' : ''}"
 			>
 				{tag}
 			</button>

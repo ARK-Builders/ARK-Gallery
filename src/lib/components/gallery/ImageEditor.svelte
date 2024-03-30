@@ -7,13 +7,13 @@
 	export let showInfo = false
 </script>
 
-<div class="flex flex-row gap-6 mx-auto w-full max-w-7xl py-12 h-[75vh]">
-	<div class="flex flex-col w-36 py-5 gap-3 bg-white rounded-xl shadow-lg">
-		<button class="flex flex-col gap-1 items-center">
+<div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 py-12">
+	<div class="flex w-36 flex-col gap-3 rounded-xl bg-white py-5 shadow-lg">
+		<button class="flex flex-col items-center gap-1">
 			<Fa icon={faRotateLeft} />
 			<span class="text-sm">Rotate Left</span>
 		</button>
-		<button class="flex flex-col gap-1 items-center">
+		<button class="flex flex-col items-center gap-1">
 			<Fa icon={faRotateRight} />
 			<span class="text-sm">Rotate Right</span>
 		</button>

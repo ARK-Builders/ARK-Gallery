@@ -5,7 +5,7 @@
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 </script>
 
-<div class="flex flex-row justify-end py-10 mx-auto w-full max-w-7xl">
+<div class="mx-auto flex w-full max-w-7xl flex-row justify-end py-10">
 	<Slider
 		bind:value={zoomLevel}
 		onValueChange={(e) => ($galleryStore.zoomLevel = e[0])}
