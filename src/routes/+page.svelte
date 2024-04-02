@@ -51,8 +51,16 @@
 			)
 
 			$galleryStore.images = output
+				.map((item) => {
+					if (item.status === 'rejected') {
+						console.error(
+							`Error while reading file: ${item.reason.message}.\nFile: ${item.reason.file}`
+						)
+					}
+					return item
+				})
 				.filter((item) => item.status === 'fulfilled')
-				.map((item) => item.value)
+				.map((item) => item.status === 'fulfilled' && item.value)
 		}
 	}
 
