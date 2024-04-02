@@ -8,8 +8,15 @@ export const openImage = () => {
 	const _galleryStore = get(galleryStore)
 
 	if (_galleryStore.selectedImage) {
+		if (_galleryStore.viewedImages.length) {
+			const alreadyViewed = _galleryStore.viewedImages.find(
+				(image) => image.id == _galleryStore.selectedImage?.id
+			)
+			if (!alreadyViewed) {
+				_galleryStore.viewedImages.push(_galleryStore.selectedImage)
+			}
+		}
 		_galleryStore.galleryView = true
-		_galleryStore.viewedImages.push(_galleryStore.selectedImage)
 	}
 	galleryStore.set(_galleryStore)
 }
