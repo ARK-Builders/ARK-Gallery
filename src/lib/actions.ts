@@ -2,6 +2,7 @@ import type { ImageType } from '$lib/utils/types'
 import { get } from 'svelte/store'
 import { galleryStore } from '$lib/store'
 import { toast } from 'svelte-sonner'
+import { LocalStorageDB } from '$lib/utils/localstorage'
 
 export const openImage = () => {
 	const _galleryStore = get(galleryStore)
@@ -44,6 +45,50 @@ export const askRemoveTag = (image: ImageType) => {
 		_galleryStore.selectedImage = image
 		_galleryStore.questionModalProp = 'removeTag'
 		_galleryStore.modal = true
+	}
+
+	galleryStore.set(_galleryStore)
+}
+
+export const deleteImage = () => {
+	const _galleryStore = get(galleryStore)
+
+	const idx = _galleryStore.images
+		.map((item: any) => item.id)
+		.indexOf(_galleryStore.selectedImage?.id)
+	_galleryStore.images.splice(idx, 1)
+	_galleryStore.images = _galleryStore.images
+	_galleryStore.questionModalProp = ''
+
+	if (_galleryStore.galleryView) {
+		if (_galleryStore.viewedImages.length) {
+			removeImageFromTab(_galleryStore.selectedImage as ImageType)
+			_galleryStore.selectedImage = _galleryStore.viewedImages[0]
+		} else {
+			_galleryStore.galleryView = false
+		}
+	} else {
+		_galleryStore.selectedImage = null
+	}
+
+	galleryStore.set(_galleryStore)
+	toast.success('Deleted Image Successfully')
+}
+
+export const deleteTag = () => {
+	const _galleryStore = get(galleryStore)
+
+	const inUse = _galleryStore.images.find((image) => image.tag == _galleryStore.selectedTag)
+	if (!inUse) {
+		const tags = new LocalStorageDB('tags')
+		tags.delete(_galleryStore.selectedTag)
+		_galleryStore.tags = tags.getAll()
+		// resetting filtered images store
+		_galleryStore.selectedTag = ''
+		_galleryStore.selectedFilteredImages = []
+		toast.success('Deleted Tag Successfully')
+	} else {
+		toast.warning("Can't delete! Tag is in use")
 	}
 
 	galleryStore.set(_galleryStore)
