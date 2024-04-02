@@ -5,7 +5,7 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { toast } from 'svelte-sonner'
 	import { LocalStorageDB } from '$lib/utils/localstorage'
-	import { removeImageFromTab } from '$lib/actions'
+	import { removeImageFromTab, removeTag } from '$lib/actions'
 	import type { ImageType } from '$lib/utils/types'
 
 	const handleYes = () => {
@@ -59,13 +59,6 @@
 			toast.success('Deleted Tag Successfully')
 		} else {
 			toast.warning("Can't delete! Tag is in use")
-		}
-	}
-
-	const removeTag = () => {
-		if ($galleryStore.selectedImage) {
-			$galleryStore.selectedImage.tag = ''
-			toast.info('Tag remvoed from Image')
 		}
 	}
 </script>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { askRemoveTag, openImage } from '$lib/actions'
 	import { galleryStore } from '$lib/store'
 	import { LocalStorageDB } from '$lib/utils/localstorage'
 	import type { ImageType } from '$lib/utils/types'
@@ -11,16 +12,6 @@
 	let typingTmr: number | undefined = undefined
 
 	$: imageHeight = $galleryStore.zoomLevel + 80
-
-	const removeTag = (image: ImageType) => {
-		if (image.tag) {
-			$galleryStore.modalQuestion = 'Are you sure want to remove this tag?'
-			$galleryStore.selectedImage = image
-			$galleryStore.questionModalProp = 'removeTag'
-			$galleryStore.modal = true
-			return
-		}
-	}
 
 	const handleKeyUp = () => {
 		clearTimeout(typingTmr)
@@ -38,14 +29,6 @@
 				tags.create([image.tag])
 			}
 		}, 1500)
-	}
-
-	const openImage = () => {
-		if ($galleryStore.selectedImage) {
-			$galleryStore.galleryView = true
-			$galleryStore.viewedImages.push($galleryStore.selectedImage)
-			$galleryStore = $galleryStore
-		}
 	}
 </script>
 
@@ -81,7 +64,7 @@
 				class="bottom-0 w-full bg-transparent py-1 pl-4 focus:outline-none"
 			/>
 			<button
-				on:click={() => removeTag(image)}
+				on:click={() => askRemoveTag(image)}
 				class:hidden={!image.tag}
 				class="absolute right-1 text-white"
 			>

@@ -1,6 +1,17 @@
 import type { ImageType } from '$lib/utils/types'
 import { get } from 'svelte/store'
 import { galleryStore } from '$lib/store'
+import { toast } from 'svelte-sonner'
+
+export const openImage = () => {
+	const _galleryStore = get(galleryStore)
+
+	if (_galleryStore.selectedImage) {
+		_galleryStore.galleryView = true
+		_galleryStore.viewedImages.push(_galleryStore.selectedImage)
+	}
+	galleryStore.set(_galleryStore)
+}
 
 export const askDeleteImage = () => {
 	const _galleryStore = get(galleryStore)
@@ -20,6 +31,30 @@ export const askDeleteTag = () => {
 		_galleryStore.questionModalProp = 'deleteTag'
 		_galleryStore.modalQuestion = 'Are you sure want to delete that tag?'
 		_galleryStore.modal = true
+	}
+
+	galleryStore.set(_galleryStore)
+}
+
+export const askRemoveTag = (image: ImageType) => {
+	const _galleryStore = get(galleryStore)
+
+	if (image.tag) {
+		_galleryStore.modalQuestion = 'Are you sure want to remove this tag?'
+		_galleryStore.selectedImage = image
+		_galleryStore.questionModalProp = 'removeTag'
+		_galleryStore.modal = true
+	}
+
+	galleryStore.set(_galleryStore)
+}
+
+export const removeTag = () => {
+	const _galleryStore = get(galleryStore)
+
+	if (_galleryStore.selectedImage) {
+		_galleryStore.selectedImage.tag = ''
+		toast.info('Tag remvoed from Image')
 	}
 
 	galleryStore.set(_galleryStore)
