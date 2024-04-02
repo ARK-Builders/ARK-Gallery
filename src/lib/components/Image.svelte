@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { askRemoveTag, openImage } from '$lib/actions'
 	import { galleryStore } from '$lib/store'
 	import { LocalStorageDB } from '$lib/utils/localstorage'
 	import type { ImageType } from '$lib/utils/types'
@@ -11,16 +12,6 @@
 	let typingTmr: number | undefined = undefined
 
 	$: imageHeight = $galleryStore.zoomLevel + 80
-
-	const removeTag = (image: ImageType) => {
-		if (image.tag) {
-			$galleryStore.modalQuestion = 'Are you sure want to remove this tag?'
-			$galleryStore.selectedImage = image
-			$galleryStore.questionModalProp = 'removeTag'
-			$galleryStore.modal = true
-			return
-		}
-	}
 
 	const handleKeyUp = () => {
 		clearTimeout(typingTmr)
@@ -46,22 +37,23 @@
 	on:focus
 	on:mouseover={() => (hasHover = true)}
 	on:mouseleave={() => (hasHover = false)}
-	class="flex flex-col relative rounded-md bg-gray-100"
+	class="relative flex flex-col rounded-md bg-gray-100"
 	style="height: {imageHeight}px;"
 >
 	<button
+		on:dblclick={() => openImage()}
 		on:click={() => ($galleryStore.selectedImage = image)}
 		class:outline={$galleryStore.selectedImage == image}
-		class="w-full h-full rounded-md hover:outline outline-blue-200"
+		class="h-full w-full rounded-md outline-blue-200 hover:outline"
 	>
 		<img
-			class="w-full h-full object-cover rounded-md cursor-pointer duration-150"
+			class="h-full w-full cursor-pointer rounded-md object-cover duration-150"
 			src={image.src?.toString()}
 			alt="image {image.name}"
 		/>
 		<div
 			class:hidden={!hasHover && !image.tag}
-			class="absolute bottom-0 bg-black text-white bg-opacity-40 flex items-center w-full rounded-bl-md rounded-br-lg"
+			class="absolute bottom-0 flex w-full items-center rounded-bl-md rounded-br-lg bg-black bg-opacity-40 text-white"
 		>
 			<span class="absolute left-1 text-lg">#</span>
 			<input
@@ -69,10 +61,10 @@
 				on:keyup={() => handleKeyUp()}
 				on:keydown={() => clearTimeout(typingTmr)}
 				type="text"
-				class="w-full py-1 pl-4 bg-transparent bottom-0 focus:outline-none"
+				class="bottom-0 w-full bg-transparent py-1 pl-4 focus:outline-none"
 			/>
 			<button
-				on:click={() => removeTag(image)}
+				on:click={() => askRemoveTag(image)}
 				class:hidden={!image.tag}
 				class="absolute right-1 text-white"
 			>

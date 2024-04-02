@@ -12,10 +12,10 @@
 <div class="flex gap-5">
 	<SliderPrimitive.Root
 		bind:value
-		class={cn('relative flex w-full gap-5 touch-none select-none items-center', className)}
+		class={cn('relative flex w-full touch-none select-none items-center gap-5', className)}
 		{...$$restProps}
 	>
-		<span class="relative bg-black h-[2px] w-full grow overflow-hidden rounded-full">
+		<span class="relative h-[2px] w-full grow overflow-hidden rounded-full bg-black">
 			<SliderPrimitive.Range class="absolute h-full" />
 		</span>
 		<SliderPrimitive.Thumb

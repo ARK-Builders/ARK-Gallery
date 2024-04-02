@@ -9,6 +9,7 @@
 		SelectTrigger
 	} from '$lib/components/ui/select'
 	import { type Selected } from 'bits-ui'
+	import { filterImageWithTag } from '$lib/actions'
 
 	export let filter: Selected<string> = { value: '' }
 
@@ -22,6 +23,8 @@
 	let tmr: number
 
 	const updateFilter = async () => {
+		$galleryStore.selectedTag = ''
+		filterImageWithTag()
 		let _images = $galleryStore.images
 		$galleryStore.activeFilter = filter.value
 
@@ -58,18 +61,18 @@
 	$: filter, updateFilter()
 </script>
 
-<div class="flex flex-row items-center w-full rounded-full shadow-lg bg-white py-3 px-10">
+<div class="flex w-full flex-row items-center rounded-full bg-white px-10 py-3 shadow-lg">
 	<p>Show:</p>
 
 	<Select bind:selected={filter}>
 		<SelectTrigger
 			asChild
 			let:builder
-			class="w-32 flex border-none focus:ring-0 focus:ring-offset-0"
+			class="flex w-32 border-none focus:ring-0 focus:ring-offset-0"
 			disabled={!$galleryStore.images.length}
 		>
 			<div
-				class="w-28 px-2 cursor-pointer text-base
+				class="w-28 cursor-pointer px-2 text-base
 				{!$galleryStore.images.length && 'pointer-events-none opacity-70'}"
 				use:builder.action
 				{...builder}
