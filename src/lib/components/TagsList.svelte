@@ -16,6 +16,7 @@
 			$galleryStore.selectedFilteredImages = []
 		} else {
 			$galleryStore.selectedTag = tag
+			$galleryStore.selectedImage = null
 		}
 	}
 </script>
