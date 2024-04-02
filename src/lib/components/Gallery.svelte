@@ -3,33 +3,8 @@
 	import Image from '$lib/components/Image.svelte'
 	import Fa from 'svelte-fa'
 	import { faBan } from '@fortawesome/free-solid-svg-icons'
-	import 'viewerjs/dist/viewer.css'
-	import Viewer from 'viewerjs'
-	import { onMount } from 'svelte'
 
-	let imgContainerRef: HTMLElement | null = null
-	let viewer
 	$: noImage = $galleryStore.selectedTag && !$galleryStore.selectedFilteredImages.length
-
-	onMount(() => {
-		if (imgContainerRef) {
-			viewer = new Viewer(imgContainerRef, {
-				inline: false,
-				toolbar: {
-					zoomIn: 1,
-					zoomOut: 1,
-					reset: 1,
-					prev: 1,
-					play: 0,
-					next: 1,
-					rotateLeft: 1,
-					rotateRight: 1,
-					flipHorizontal: 1,
-					flipVertical: 1
-				}
-			})
-		}
-	})
 </script>
 
 {#if $galleryStore.images?.length}
