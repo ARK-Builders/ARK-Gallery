@@ -15,7 +15,7 @@
 	export let showInfo = false
 </script>
 
-<div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 py-12">
+<div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
 	<div class="flex w-36 flex-col gap-6 rounded-xl bg-white py-5 shadow-lg">
 		<ActionButton text="Rotate Left" icon={faRotateLeft} />
 		<ActionButton text="Rotate Right" icon={faRotateRight} />

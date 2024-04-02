@@ -15,6 +15,8 @@ export const openImage = () => {
 			if (!alreadyViewed) {
 				_galleryStore.viewedImages.push(_galleryStore.selectedImage)
 			}
+		} else {
+			_galleryStore.viewedImages.push(_galleryStore.selectedImage)
 		}
 		_galleryStore.galleryView = true
 	}

@@ -19,7 +19,7 @@
 </script>
 
 <div class="flex flex-col">
-	<div class="mx-auto flex h-16 w-full max-w-7xl flex-row items-center gap-5">
+	<div class="mx-auto flex h-16 w-full max-w-7xl flex-row items-center gap-5 px-5">
 		<button class="" on:click={() => ($galleryStore.galleryView = false)}>
 			<Fa icon={faHomeAlt} class="hover:text-gray-500" />
 		</button>
@@ -50,7 +50,7 @@
 			{/if}
 		</div>
 	</div>
-	<div class="flex h-16 bg-blue-400 text-white">
+	<div class="flex h-16 bg-blue-400 px-5 text-white">
 		<div class="mx-auto flex w-full max-w-7xl flex-row items-center justify-end gap-4">
 			<button class="h-8">
 				<Fa icon={faUndo} />
