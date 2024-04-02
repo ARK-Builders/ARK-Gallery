@@ -72,6 +72,12 @@
 			$galleryStore.modal = true
 		}
 	}
+	$: if ($galleryStore.selectedTag) {
+		if ($galleryStore.images.length) {
+			let filtered = $galleryStore.images.filter((image) => image.tag == $galleryStore.selectedTag)
+			$galleryStore.selectedFilteredImages = filtered
+		}
+	}
 
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 </script>
