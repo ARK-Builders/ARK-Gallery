@@ -52,16 +52,19 @@
 	</div>
 	<div class="flex h-16 bg-blue-400 text-white">
 		<div class="mx-auto flex w-full max-w-7xl flex-row items-center justify-end gap-4">
-			<button>
+			<button class="h-8">
 				<Fa icon={faUndo} />
 			</button>
-			<button>
+			<button class="h-8">
 				<Fa icon={faRedo} />
 			</button>
-			<button on:click={() => (showInfo = !showInfo)}>
+			<button
+				class="h-8 {showInfo && 'border-b border-white'}"
+				on:click={() => (showInfo = !showInfo)}
+			>
 				<Fa icon={faInfoCircle} />
 			</button>
-			<button on:click={() => askDeleteImage()}>
+			<button class="h-8" on:click={() => askDeleteImage()}>
 				<Fa icon={faTrashAlt} />
 			</button>
 		</div>
