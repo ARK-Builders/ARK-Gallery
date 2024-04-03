@@ -8,29 +8,30 @@
 	import { open } from '@tauri-apps/api/dialog'
 	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
 	import TagsList from '$lib/components/TagsList.svelte'
+	import { readDir } from '@tauri-apps/api/fs'
+	import { CloudCog } from 'lucide-svelte'
 
 	const uploadFolder = async () => {
 		let selected = await open({
 			multiple: true,
-			filters: [
-				{
-					name: 'Image',
-					extensions: ['png', 'jpeg', 'jpg', 'gif', 'webp']
-				}
-			]
+			directory: true
 		})
 
-		if (!Array.isArray(selected)) {
-			if (!selected) {
-				selected = []
-			} else {
-				selected = [selected]
-			}
-		}
+		if (Array.isArray(selected) && selected.length) {
+			const folder = selected[0]
+			const values = (await readDir(folder))
+				.map((file) => file.path)
+				.filter(
+					(file) =>
+						file.endsWith('.png') ||
+						file.endsWith('.jpeg') ||
+						file.endsWith('.jpg') ||
+						file.endsWith('.gif') ||
+						file.endsWith('.webp')
+				)
 
-		if (Array.isArray(selected)) {
 			const output = await Promise.allSettled(
-				selected.map(async (file) => {
+				values.map(async (file) => {
 					const metadata: {
 						file_type: string
 						file_size: number
