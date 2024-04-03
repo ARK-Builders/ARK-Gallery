@@ -9,7 +9,6 @@
 	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
 	import TagsList from '$lib/components/TagsList.svelte'
 	import { readDir } from '@tauri-apps/api/fs'
-	import { CloudCog } from 'lucide-svelte'
 
 	const uploadFolder = async () => {
 		let selected = await open({
