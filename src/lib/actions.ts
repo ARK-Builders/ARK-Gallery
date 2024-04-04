@@ -18,7 +18,17 @@ export const openImage = () => {
 		} else {
 			_galleryStore.viewedImages.push(_galleryStore.selectedImage)
 		}
+		_galleryStore.activeTabIndex = _galleryStore.viewedImages.length - 1
 		_galleryStore.galleryView = true
+	}
+	galleryStore.set(_galleryStore)
+}
+
+export const replaceImageInTab = (idx: number) => {
+	const _galleryStore = get(galleryStore)
+
+	if (_galleryStore.selectedImage && _galleryStore.viewedImages.length) {
+		_galleryStore.viewedImages[idx] = _galleryStore.selectedImage
 	}
 	galleryStore.set(_galleryStore)
 }

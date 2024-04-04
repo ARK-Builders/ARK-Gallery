@@ -14,7 +14,8 @@ const galleryInterface = {
 	zoomLevel: 100 as number,
 	activeFilter: '',
 	galleryView: false as boolean,
-	viewedImages: [] as ImageType[]
+	viewedImages: [] as ImageType[],
+	activeTabIndex: null as unknown as number
 }
 
 export const galleryStore = writable(galleryInterface)
