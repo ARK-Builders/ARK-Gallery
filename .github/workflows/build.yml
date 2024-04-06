@@ -13,10 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - platform: 'macos-latest' # for Arm based macs (M1 and above).
-            args: '--target aarch64-apple-darwin'
           - platform: 'macos-latest' # for Intel based macs.
-            args: '--target x86_64-apple-darwin'
+            args: '--target universal-apple-darwin'
           - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
             args: ''
           - platform: 'windows-latest'
@@ -46,15 +44,23 @@ jobs:
         # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
 
       - name: install frontend dependencies
-        run: yarn install # change this to npm, pnpm or bun depending on which one you use.
+        run: yarn install
 
-      - uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Windows Build
+        uses: actions/upload-artifact@v4
+        if: matrix.settings.platform == 'windows-latest'
         with:
-          # tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          # releaseName: 'App v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
-          prerelease: false
-          args: ${{ matrix.settings.args }}
+          name: ark-gallery-Windows.zip
+          path: ./src-tauri/target/release/bundle/
+      - name: Upload Linux AppImage
+        if: matrix.settings.platform == 'ubuntu-22.04'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ark-gallery.AppImage
+          path: ./src-tauri/target/release/bundle/appimage/ark-gallery_*_amd64.AppImage
+      - name: Upload MacOS App
+        if: matrix.settings.platform == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ark-gallery.app
+          path: ./src-tauri/target/release/bundle/macos/ark-gallery.app
