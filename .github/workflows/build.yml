@@ -65,15 +65,9 @@ jobs:
         with:
           name: ark-gallery.AppImage
           path: ./src-tauri/target/release/bundle/appimage/ark-gallery_*_amd64.AppImage
-      - name: Upload MacOS DMG
-        if: matrix.settings.platform == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: ark-gallery.dmg
-          path: ./src-tauri/target/release/bundle/dmg/ark-gallery.dmg
       - name: Upload MacOS App
         if: matrix.settings.platform == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: ark-gallery.app
-          path: ./src-tauri/target/release/bundle/osx/ark-gallery.app
+          path: ./src-tauri/target/release/bundle/macos/ark-gallery.app
