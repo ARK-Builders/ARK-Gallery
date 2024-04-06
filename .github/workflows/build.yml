@@ -42,6 +42,13 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
         # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
         # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          releaseBody: 'See the assets to download this version and install.'
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.settings.args }}
 
       - name: install frontend dependencies
         run: yarn install
@@ -58,9 +65,15 @@ jobs:
         with:
           name: ark-gallery.AppImage
           path: ./src-tauri/target/release/bundle/appimage/ark-gallery_*_amd64.AppImage
+      - name: Upload MacOS DMG
+        if: matrix.settings.platform == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ark-gallery.dmg
+          path: ./src-tauri/target/release/bundle/dmg/ark-gallery.dmg
       - name: Upload MacOS App
         if: matrix.settings.platform == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: ark-gallery.app
-          path: ./src-tauri/target/release/bundle/macos/ark-gallery.app
+          path: ./src-tauri/target/release/bundle/osx/ark-gallery.app
