@@ -2,7 +2,7 @@ import { writable } from 'svelte/store'
 import type { ImageType } from '$lib/utils/types'
 
 const galleryInterface = {
-	images: [] as any[],
+	images: [] as ImageType[],
 	selectedFilteredImages: [] as any[],
 	tags: [] as string[],
 	selectedTag: '' as string,
