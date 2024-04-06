@@ -6,7 +6,6 @@ env:
 on: [push]
 
 jobs:
-  jobs:
   build-tauri:
     permissions:
       contents: write
