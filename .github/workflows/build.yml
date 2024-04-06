@@ -77,3 +77,35 @@ jobs:
         with:
           name: ark-gallery-Windows.zip
           path: ./src-tauri/target/release/bundle/
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: brew install pkg-config openssl webkit2gtk gtk+3
+
+      - name: Fetch Node.js Dependencies
+        run: yarn
+
+      - name: Build Release version
+        run: yarn tauri build
+
+      - name: Upload App
+        uses: actions/upload-artifact@v4
+        with:
+          name: ark-gallery-macOS.zip
+          path: ./src-tauri/target/release/bundle/
