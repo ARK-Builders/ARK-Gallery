@@ -6,106 +6,56 @@ env:
 on: [push]
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        settings:
+          - platform: 'macos-latest' # for Arm based macs (M1 and above).
+            args: '--target aarch64-apple-darwin'
+          - platform: 'macos-latest' # for Intel based macs.
+            args: '--target x86_64-apple-darwin'
+          - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
+            args: ''
+          - platform: 'windows-latest'
+            args: ''
 
+    runs-on: ${{ matrix.settings.platform }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
-
-      - name: Setup Node.js
+      - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: lts/*
 
-      - name: Install dependencies
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+          targets: ${{ matrix.settings.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.settings.platform == 'ubuntu-22.04' # This must match the platform value defined above.
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev \
-            webkit2gtk-4.0 javascriptcoregtk-4.1 libappindicator3-dev \
-            librsvg2-dev patchelf libdbus-1-dev \
-            pkg-config \
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+        # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
+        # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
 
-      - name: Fetch Node.js Dependencies
-        run: yarn
+      - name: install frontend dependencies
+        run: yarn install # change this to npm, pnpm or bun depending on which one you use.
 
-      - name: Build Release version
-        run: yarn tauri build
-
-      - name: Upload AppImage
-        uses: actions/upload-artifact@v4
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ark-gallery.AppImage
-          path: ./src-tauri/target/release/bundle/appimage/ark-gallery_*_amd64.AppImage
-
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Install dependencies
-        run: |
-          choco install -y nodejs
-
-      - name: Fetch Node.js Dependencies
-        run: yarn
-
-      - name: Build Release version
-        run: yarn tauri build
-
-      - name: Upload App
-        uses: actions/upload-artifact@v2
-        with:
-          name: ark-gallery-Windows.zip
-          path: ./src-tauri/target/release/bundle/
-  build-macos:
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Install dependencies
-        run: brew install pkg-config openssl webkit2gtk gtk+3
-
-      - name: Fetch Node.js Dependencies
-        run: yarn
-
-      - name: Build Release version
-        run: yarn tauri build
-
-      - name: Upload App
-        uses: actions/upload-artifact@v4
-        with:
-          name: ark-gallery-macOS.zip
-          path: ./src-tauri/target/release/bundle/
+          # tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
+          # releaseName: 'App v__VERSION__'
+          releaseBody: 'See the assets to download this version and install.'
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.settings.args }}
