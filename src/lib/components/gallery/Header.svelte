@@ -24,13 +24,16 @@
 			<Fa icon={faHomeAlt} class="hover:text-gray-500" />
 		</button>
 
-		<div class="flex h-full flex-row gap-1">
+		<div class="flex h-full flex-row gap-1 overflow-y-auto">
 			{#if $galleryStore.viewedImages?.length}
-				{#each $galleryStore.viewedImages as viewedImage}
+				{#each $galleryStore.viewedImages as viewedImage, i}
 					<Tooltip>
 						<button
 							slot="tip-trigger"
-							on:click={() => ($galleryStore.selectedImage = viewedImage)}
+							on:click={() => {
+								$galleryStore.selectedImage = viewedImage
+								$galleryStore.activeTabIndex = i
+							}}
 							class="relative flex h-full w-44 items-center rounded-lg px-3
 						{viewedImage != $galleryStore.selectedImage ? 'bg-gray-50' : 'bg-white'}"
 						>
