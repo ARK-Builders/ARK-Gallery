@@ -70,4 +70,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ark-gallery.app
-          path: ./src-tauri/target/release/bundle/macos/ark-gallery.app
+          path: ./src-tauri/target/release/bundle/macos/
