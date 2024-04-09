@@ -1,26 +1,23 @@
 <script lang="ts">
-	import { makeid } from '$lib/utils/tools'
 	import Gallery from '$lib/components/Gallery.svelte'
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
-	import { galleryStore } from '$lib/store'
-	import { Slider } from '$lib/components/ui/slider'
-	import { open } from '@tauri-apps/api/dialog'
-	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
 	import TagsList from '$lib/components/TagsList.svelte'
-	import { readDir } from '@tauri-apps/api/fs'
-	import { listen } from '@tauri-apps/api/event'
-	import type { ImageType } from '$lib/utils/types'
-	import TagsList from '$lib/components/TagsList.svelte'
-	import { toast } from 'svelte-sonner'
 	import Header from '$lib/components/gallery/Header.svelte'
 	import Footer from '$lib/components/Footer.svelte'
 	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
+
+	import { open } from '@tauri-apps/api/dialog'
+	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
+	import { readDir } from '@tauri-apps/api/fs'
+	import { listen } from '@tauri-apps/api/event'
+
+	import { makeid } from '$lib/utils/tools'
+	import { galleryStore } from '$lib/store'
+	import type { ImageType } from '$lib/utils/types'
 	import { askDeleteImage, askDeleteTag, filterImageWithTag } from '$lib/actions'
 
 	let imageDropping = false
-
-	let images: ImageType[] = []
 
 	listen('tauri://file-drop-hover', (e) => {
 		imageDropping = true
