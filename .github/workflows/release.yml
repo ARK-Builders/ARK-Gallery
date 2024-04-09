@@ -77,3 +77,40 @@ jobs:
         with:
           artifacts: './target/release/bundle/*.exe'
           token: ${{ secrets.GITHUB_TOKEN }}
+  release-macos:
+    runs-on: macos-latest
+    environment: Development
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.2.0
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies (adjust as needed)
+        run: brew install pkg-config openssl webkit2gtk gtk+3
+
+      - name: Fetch Node.js dependencies
+        run: yarn
+
+      - name: Build Release version
+        run: yarn tauri build
+
+      - name: Create Release Archive (adjust filename/compression if needed)
+        run: |
+          cd src-tauri/target/release/bundle
+          zip -r ark-gallery-macOS.zip .
+
+      - name: Release macOS App
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: './ark-gallery-macOS.zip'
+          token: ${{ secrets.GITHUB_TOKEN }}

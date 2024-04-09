@@ -1,57 +1,134 @@
 <script lang="ts">
-	import { makeid, openDirectory } from '$lib/utils/tools'
 	import Gallery from '$lib/components/Gallery.svelte'
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
-	import { galleryStore } from '$lib/store'
-	import type { ImageType } from '$lib/utils/types'
 	import TagsList from '$lib/components/TagsList.svelte'
-	import { toast } from 'svelte-sonner'
 	import Header from '$lib/components/gallery/Header.svelte'
 	import Footer from '$lib/components/Footer.svelte'
 	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
+
+	import { open } from '@tauri-apps/api/dialog'
+	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
+	import { readDir } from '@tauri-apps/api/fs'
+	import { listen } from '@tauri-apps/api/event'
+
+	import { makeid } from '$lib/utils/tools'
+	import { galleryStore } from '$lib/store'
+	import type { ImageType } from '$lib/utils/types'
 	import { askDeleteImage, askDeleteTag, filterImageWithTag } from '$lib/actions'
 
-	let images: ImageType[] = []
+	let imageDropping = false
+
+	listen('tauri://file-drop-hover', (e) => {
+		imageDropping = true
+	})
+
+	listen('tauri://file-drop-cancelled', (e) => {
+		imageDropping = false
+	})
+
+	listen('tauri://file-drop', async (e) => {
+		imageDropping = false
+
+		const payload = e.payload as string[]
+
+		const dirs = []
+		const images = []
+
+		for (const file of payload) {
+			const metadata: {
+				file_type: string
+				file_size: number
+				created_time: string
+				modified_time: string
+				accessed_time: string
+			} = await invoke('get_file_metadata', { filePath: file })
+
+			if (metadata.file_type === 'directory') {
+				dirs.push(file)
+			} else {
+				images.push(file)
+			}
+		}
+
+		dirs.length && (await loadDirs(dirs)).forEach((path) => images.push(path))
+
+		$galleryStore.images = await loadImages(images)
+	})
+
+	const loadDirs = async (paths: string[]): Promise<string[]> => {
+		return (
+			await Promise.allSettled(
+				paths.map(async (folder) => {
+					return (await readDir(folder))
+						.map((file) => file.path)
+						.filter(
+							(file) =>
+								file.endsWith('.png') ||
+								file.endsWith('.jpeg') ||
+								file.endsWith('.jpg') ||
+								file.endsWith('.gif') ||
+								file.endsWith('.webp')
+						)
+				})
+			)
+		)
+			.map((item) => {
+				if (item.status === 'rejected') {
+					console.error(`ERROR: while reading folder: ${item.reason}`)
+				}
+				return item
+			})
+			.filter((item): item is PromiseFulfilledResult<string[]> => item.status === 'fulfilled')
+			.map((item) => (item.status === 'fulfilled' ? item.value : null))
+			.filter((item): item is string[] => item !== null)
+			.flat()
+	}
+
+	const loadImages = async (paths: string[]): Promise<ImageType[]> => {
+		const output: PromiseSettledResult<ImageType>[] = await Promise.allSettled(
+			paths.map(async (file) => {
+				const metadata: {
+					file_type: string
+					file_size: number
+					created_time: string
+					modified_time: string
+					accessed_time: string
+				} = await invoke('get_file_metadata', { filePath: file })
+
+				return {
+					id: makeid(5),
+					src: convertFileSrc(file),
+					name: file,
+					size: metadata.file_size,
+					lastModified: metadata.modified_time,
+					type: metadata.file_type,
+					tag: '' as string
+				} as ImageType
+			})
+		)
+
+		return output
+			.map((item) => {
+				if (item.status === 'rejected') {
+					console.error(`ERROR: while reading folder: ${item.reason}`)
+				}
+				return item
+			})
+			.filter((item): item is PromiseFulfilledResult<ImageType> => item.status === 'fulfilled')
+			.map((item) => (item.status === 'fulfilled' ? item.value : null))
+			.filter((item): item is ImageType => item !== null && item.type !== 'directory')
+	}
 
 	const uploadFolder = async () => {
-		images = []
-		$galleryStore.images = []
-		const filesDir: File[] = (await openDirectory()) as File[]
+		let selected = await open({
+			multiple: true,
+			directory: true
+		})
 
-		$galleryStore.fileInfos = filesDir
-
-		if (filesDir && filesDir.length) {
-			filesDir.forEach((file) => {
-				if (file.type && !file.type.startsWith('image/')) {
-					console.log('File is not an image.', file.type, file)
-					toast.error('One of file is not an image')
-					return
-				}
-				var reader = new FileReader()
-
-				reader.addEventListener(
-					'load',
-					function () {
-						let { name, size, lastModified, type } = file
-						images.push({
-							id: makeid(5),
-							src: reader.result,
-							tag: '',
-							name,
-							size,
-							lastModified,
-							type
-						})
-						$galleryStore.images = images
-					},
-					false
-				)
-
-				if (file) {
-					reader.readAsDataURL(file)
-				}
-			})
+		if (Array.isArray(selected) && selected.length) {
+			const values = await loadDirs(selected)
+			$galleryStore.images = await loadImages(values)
 		}
 	}
 
@@ -67,6 +144,13 @@
 </svelte:head>
 
 <div class="mx-auto flex h-screen w-full flex-col justify-between rounded-md">
+	{#if imageDropping}
+		<div
+			class="absolute top-0 left-0 w-full h-full bg-blue-300 bg-opacity-50 z-50 flex items-center justify-center"
+		>
+			<p class="text-2xl font-bold text-white">Drop your images here</p>
+		</div>
+	{/if}
 	<div class:hidden={$galleryStore.galleryView} class="mx-auto w-full max-w-7xl p-5">
 		<Filter />
 		<Actions
