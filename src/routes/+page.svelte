@@ -11,8 +11,16 @@
 	import { readDir } from '@tauri-apps/api/fs'
 	import { listen } from '@tauri-apps/api/event'
 	import type { ImageType } from '$lib/utils/types'
+	import TagsList from '$lib/components/TagsList.svelte'
+	import { toast } from 'svelte-sonner'
+	import Header from '$lib/components/gallery/Header.svelte'
+	import Footer from '$lib/components/Footer.svelte'
+	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
+	import { askDeleteImage, askDeleteTag, filterImageWithTag } from '$lib/actions'
 
 	let imageDropping = false
+
+	let images: ImageType[] = []
 
 	listen('tauri://file-drop-hover', (e) => {
 		imageDropping = true
@@ -127,37 +135,18 @@
 		}
 	}
 
-	const deleteImage = () => {
-		if ($galleryStore.selectedImage) {
-			$galleryStore.questionModalProp = 'deleteImage'
-			$galleryStore.modalQuestion = 'Are you sure want to delete that image?'
-			$galleryStore.modal = true
-			return
-		}
-	}
-
-	const deleteTag = () => {
-		if ($galleryStore.selectedTag) {
-			$galleryStore.questionModalProp = 'deleteTag'
-			$galleryStore.modalQuestion = 'Are you sure want to delete that tag?'
-			$galleryStore.modal = true
-		}
-	}
 	$: if ($galleryStore.selectedTag) {
-		if ($galleryStore.images.length) {
-			let filtered = $galleryStore.images.filter((image) => image.tag == $galleryStore.selectedTag)
-			$galleryStore.selectedFilteredImages = filtered
-		}
+		filterImageWithTag()
 	}
 
-	let zoomLevel: number[] = [$galleryStore.zoomLevel]
+	let showInfo = false
 </script>
 
 <svelte:head>
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
 
-<div class="flex flex-col justify-between max-w-7xl p-5 w-full rounded-md mx-auto h-screen">
+<div class="mx-auto flex h-screen w-full flex-col justify-between rounded-md">
 	{#if imageDropping}
 		<div
 			class="absolute top-0 left-0 w-full h-full bg-blue-300 bg-opacity-50 z-50 flex items-center justify-center"
@@ -165,23 +154,19 @@
 			<p class="text-2xl font-bold text-white">Drop your images here</p>
 		</div>
 	{/if}
-
-	<Filter />
-	<Actions
-		on:upload={() => uploadFolder()}
-		on:deleteImage={() => deleteImage()}
-		on:deleteTag={() => deleteTag()}
-	/>
-	<TagsList />
-	<Gallery />
-	<div class="flex py-10 flex-row justify-end">
-		<Slider
-			bind:value={zoomLevel}
-			onValueChange={(e) => ($galleryStore.zoomLevel = e[0])}
-			class="w-80"
-			max={130}
-			min={80}
-			step={1}
+	<div class:hidden={$galleryStore.galleryView} class="mx-auto w-full max-w-7xl p-5">
+		<Filter />
+		<Actions
+			on:upload={() => uploadFolder()}
+			on:deleteImage={() => askDeleteImage()}
+			on:deleteTag={() => askDeleteTag()}
 		/>
+		<TagsList />
+		<Gallery />
 	</div>
+	<div class:hidden={!$galleryStore.galleryView}>
+		<Header bind:showInfo />
+		<ImageEditor bind:showInfo />
+	</div>
+	<Footer />
 </div>

@@ -11,9 +11,9 @@
 	$: hasImages = $galleryStore.images?.length
 </script>
 
-<div class="flex flex-row gap-3 justify-end mt-10">
+<div class="mt-10 flex flex-row justify-end gap-3">
 	<Button
-		class="flex flex-row items-center text-white gap-2 rounded-xl bg-blue-400 hover:bg-blue-600 px-4 py-2 {!hasImages
+		class="flex flex-row items-center gap-2 rounded-xl bg-blue-400 px-4 py-2 text-white hover:bg-blue-600 {!hasImages
 			? 'hidden'
 			: ''}"
 	>
@@ -24,7 +24,7 @@
 		<Button
 			slot="tip-trigger"
 			on:click={() => dispatch('upload')}
-			class="flex flex-row items-center text-white gap-2 rounded-xl bg-blue-400 hover:bg-blue-600 px-4 py-2"
+			class="flex flex-row items-center gap-2 rounded-xl bg-blue-400 px-4 py-2 text-white hover:bg-blue-600"
 		>
 			<Fa icon={faImage} />
 			<span>Select images</span>
@@ -37,7 +37,7 @@
 			slot="tip-trigger"
 			variant={'outline'}
 			on:click={() => dispatch('deleteTag')}
-			class="px-3 bg-gray-200 rounded-lg"
+			class="rounded-lg bg-gray-200 px-3"
 		>
 			<Fa icon={faTrashAlt} />
 		</Button>
@@ -50,7 +50,7 @@
 			variant={'outline'}
 			disabled={!$galleryStore.selectedImage}
 			on:click={() => dispatch('deleteImage')}
-			class="px-3 bg-gray-200 rounded-lg {!hasImages ? 'hidden' : ''}"
+			class="rounded-lg bg-gray-200 px-3 {!hasImages ? 'hidden' : ''}"
 		>
 			<Fa icon={faTrash} />
 		</Button>
