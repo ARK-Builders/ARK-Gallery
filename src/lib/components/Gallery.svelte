@@ -8,9 +8,9 @@
 </script>
 
 <div
-	class="gap-3 flex-1 w-full overflow-auto
+	class="w-full flex-1 gap-3 overflow-auto p-1
 		{noImage
-		? 'flex flex-col gap-5 items-center w-full justify-center'
+		? 'flex w-full flex-col items-center justify-center gap-5'
 		: 'grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6'}"
 >
 	{#if noImage}
