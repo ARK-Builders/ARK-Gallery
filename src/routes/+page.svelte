@@ -16,6 +16,7 @@
 	import { galleryStore } from '$lib/store'
 	import type { ImageType } from '$lib/utils/types'
 	import { askDeleteImage, askDeleteTag, filterImageWithTag } from '$lib/actions'
+	import ExifReader from 'exifreader'
 
 	let imageDropping = false
 
@@ -95,6 +96,7 @@
 					modified_time: string
 					accessed_time: string
 				} = await invoke('get_file_metadata', { filePath: file })
+				const EXIF = await ExifReader.load(convertFileSrc(file), { async: true })
 
 				return {
 					id: makeid(5),
@@ -102,7 +104,8 @@
 					name: file,
 					size: metadata.file_size,
 					lastModified: metadata.modified_time,
-					type: metadata.file_type,
+					type: EXIF['FileType']?.value,
+					resolution: `${EXIF['Image Width']?.value} x ${EXIF['Image Height']?.value}`,
 					tag: '' as string
 				} as ImageType
 			})
@@ -146,7 +149,7 @@
 <div class="mx-auto flex h-screen w-full flex-col justify-between rounded-md">
 	{#if imageDropping}
 		<div
-			class="absolute top-0 left-0 w-full h-full bg-blue-300 bg-opacity-50 z-50 flex items-center justify-center"
+			class="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-blue-300 bg-opacity-50"
 		>
 			<p class="text-2xl font-bold text-white">Drop your images here</p>
 		</div>

@@ -13,6 +13,6 @@
 		value={dayjs($galleryStore.selectedImage?.lastModified).format('DD MMM YYYY')}
 	/>
 	<DetailField icon={faTag} text="Tag" value={$galleryStore.selectedImage?.tag} />
-	<DetailField icon={faListNumeric} text="Size" value={$galleryStore.selectedImage?.size} />
+	<DetailField icon={faListNumeric} text="Size" value={$galleryStore.selectedImage?.resolution} />
 	<DetailField icon={faFileAlt} text="Format" value={$galleryStore.selectedImage?.type} />
 </div>

@@ -4,6 +4,7 @@ export type ImageType = {
 	tag: string
 	name: string
 	size: number
+	resolution: string
 	lastModified: string | number
 	type: string
 }
