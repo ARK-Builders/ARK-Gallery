@@ -11,8 +11,6 @@
 	let hasHover = false
 	let typingTmr: number | undefined = undefined
 
-	$: imageHeight = $galleryStore.zoomLevel + 80
-
 	const handleKeyUp = () => {
 		clearTimeout(typingTmr)
 		typingTmr = setTimeout(() => {
@@ -38,7 +36,6 @@
 	on:mouseover={() => (hasHover = true)}
 	on:mouseleave={() => (hasHover = false)}
 	class="relative flex flex-col rounded-md bg-gray-100"
-	style="height: {imageHeight}px;"
 >
 	<button
 		on:dblclick={() => openImage()}

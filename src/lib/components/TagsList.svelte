@@ -21,7 +21,7 @@
 	}
 </script>
 
-<div class="my-5 flex flex-row flex-wrap items-center gap-3">
+<div class="flex flex-row flex-wrap items-center gap-3">
 	{#if $galleryStore.activeFilter == 'tag' && $galleryStore.tags.length}
 		{#each $galleryStore.tags as tag}
 			<button
