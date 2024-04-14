@@ -11,8 +11,8 @@
 
 <div
 	class="w-full gap-3
-		{noImage ? 'flex flex-col items-center justify-center gap-5' : 'grid grid-flow-row'}"
-	style="grid-template-columns: repeat(auto-fill, minmax({imageHeight}px, 1fr));"
+		{noImage ? 'flex flex-col items-center justify-center gap-5' : 'grid grid-flow-row justify-center'}"
+	style="grid-template-columns: repeat(auto-fill, {imageHeight}px);"
 >
 	{#if noImage}
 		<Fa icon={faBan} size="5x" class="text-gray-400" />
