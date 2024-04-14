@@ -5,6 +5,7 @@ export type ImageType = {
 	name: string
 	size: number
 	resolution: string
+	compression: number | undefined
 	lastModified: string | number
 	type: string
 }

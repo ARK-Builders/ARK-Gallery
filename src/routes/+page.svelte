@@ -103,8 +103,9 @@
 					src: convertFileSrc(file),
 					name: file,
 					size: metadata.file_size,
-					lastModified: metadata.modified_time,
+					lastModified: EXIF['ICC Profile Date'].value,
 					type: EXIF['FileType']?.value,
+					compression: EXIF['Compression']?.value,
 					resolution: `${EXIF['Image Width']?.value} x ${EXIF['Image Height']?.value}`,
 					tag: '' as string
 				} as ImageType

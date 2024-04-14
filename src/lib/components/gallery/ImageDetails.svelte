@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { galleryStore } from '$lib/store'
 	import { faCalendarAlt, faFileAlt } from '@fortawesome/free-regular-svg-icons'
-	import { faListNumeric, faTag } from '@fortawesome/free-solid-svg-icons'
+	import { faCompress, faListNumeric, faTag } from '@fortawesome/free-solid-svg-icons'
 	import DetailField from '$lib/components/gallery/DetailField.svelte'
 	import dayjs from 'dayjs'
 </script>
@@ -15,4 +15,5 @@
 	<DetailField icon={faTag} text="Tag" value={$galleryStore.selectedImage?.tag} />
 	<DetailField icon={faListNumeric} text="Size" value={$galleryStore.selectedImage?.resolution} />
 	<DetailField icon={faFileAlt} text="Format" value={$galleryStore.selectedImage?.type} />
+	<DetailField icon={faCompress} text="EXIF" value={$galleryStore.selectedImage?.compression} />
 </div>
