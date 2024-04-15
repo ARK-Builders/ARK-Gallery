@@ -143,27 +143,39 @@
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
 
-<div class="mx-auto flex h-screen w-full flex-col justify-between rounded-md">
+<div class="flex h-screen w-full flex-col justify-start">
 	{#if imageDropping}
 		<div
-			class="absolute top-0 left-0 w-full h-full bg-blue-300 bg-opacity-50 z-50 flex items-center justify-center"
+			class="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-blue-300 bg-opacity-50"
 		>
 			<p class="text-2xl font-bold text-white">Drop your images here</p>
 		</div>
 	{/if}
-	<div class:hidden={$galleryStore.galleryView} class="mx-auto w-full max-w-7xl p-5">
+	<div
+		class:hidden={$galleryStore.galleryView}
+		class="mx-auto flex h-full w-full max-w-7xl flex-col justify-start p-5"
+	>
 		<Filter />
-		<Actions
-			on:upload={() => uploadFolder()}
-			on:deleteImage={() => askDeleteImage()}
-			on:deleteTag={() => askDeleteTag()}
-		/>
-		<TagsList />
-		<Gallery />
+		<div class="mt-10">
+			<Actions
+				on:upload={() => uploadFolder()}
+				on:deleteImage={() => askDeleteImage()}
+				on:deleteTag={() => askDeleteTag()}
+			/>
+		</div>
+		<div class="my-5">
+			<TagsList />
+		</div>
+		<div class="flex-1 overflow-auto p-1">
+			<Gallery />
+		</div>
+
+		<div class="flex flex-col items-end justify-center pt-4">
+			<Footer />
+		</div>
 	</div>
 	<div class:hidden={!$galleryStore.galleryView}>
 		<Header bind:showInfo />
 		<ImageEditor bind:showInfo />
 	</div>
-	<Footer />
 </div>
