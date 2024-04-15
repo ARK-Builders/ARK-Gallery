@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Slider from '$lib/components/ui/slider/slider.svelte'
 	import { galleryStore } from '$lib/store'
+
 	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 </script>
 
