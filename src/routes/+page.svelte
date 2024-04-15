@@ -6,7 +6,6 @@
 	import Header from '$lib/components/gallery/Header.svelte'
 	import Footer from '$lib/components/Footer.svelte'
 	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
-	import Slider from '$lib/components/ui/slider/slider.svelte'
 
 	import { open } from '@tauri-apps/api/dialog'
 	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
@@ -17,8 +16,6 @@
 	import { galleryStore } from '$lib/store'
 	import type { ImageType } from '$lib/utils/types'
 	import { askDeleteImage, askDeleteTag, filterImageWithTag } from '$lib/actions'
-
-	let zoomLevel: number[] = [$galleryStore.zoomLevel]
 
 	let imageDropping = false
 
