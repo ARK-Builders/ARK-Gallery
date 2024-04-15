@@ -174,19 +174,11 @@
 		</div>
 
 		<div class="flex flex-col items-end justify-center pt-4">
-			<Slider
-				bind:value={zoomLevel}
-				onValueChange={(e) => ($galleryStore.zoomLevel = e[0])}
-				class="w-80"
-				max={250}
-				min={50}
-				step={5}
-			/>
+			<Footer />
 		</div>
 	</div>
 	<div class:hidden={!$galleryStore.galleryView}>
 		<Header bind:showInfo />
 		<ImageEditor bind:showInfo />
-		<Footer />
 	</div>
 </div>
