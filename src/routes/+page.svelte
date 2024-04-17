@@ -6,16 +6,19 @@
 	import Header from '$lib/components/gallery/Header.svelte'
 	import Footer from '$lib/components/Footer.svelte'
 	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
+	import Slider from '$lib/components/ui/slider/slider.svelte'
+	import DeleteModal from '$lib/components/DeleteModal.svelte'
 
 	import { open } from '@tauri-apps/api/dialog'
 	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
-	import { readDir } from '@tauri-apps/api/fs'
+	import { readDir, removeFile } from '@tauri-apps/api/fs'
 	import { listen } from '@tauri-apps/api/event'
 
 	import { makeid } from '$lib/utils/tools'
 	import { galleryStore } from '$lib/store'
+	import { askDeleteTag, deleteImage, filterImageWithTag } from '$lib/actions'
+
 	import type { ImageType } from '$lib/utils/types'
-	import { askDeleteImage, askDeleteTag, filterImageWithTag } from '$lib/actions'
 
 	let imageDropping = false
 
@@ -103,7 +106,8 @@
 					size: metadata.file_size,
 					lastModified: metadata.modified_time,
 					type: metadata.file_type,
-					tag: '' as string
+					tag: '' as string,
+					path: file
 				} as ImageType
 			})
 		)
@@ -137,11 +141,34 @@
 	}
 
 	let showInfo = false
+
+	let deleteModal = false
 </script>
 
 <svelte:head>
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
+
+{#if deleteModal}
+	<DeleteModal
+		show={deleteModal}
+		on:abort={() => {
+			deleteModal = false
+		}}
+		on:softDelete={async () => {
+			await invoke('move_file_to_trash', { filePath: $galleryStore.selectedImage?.path })
+			deleteImage()
+			deleteModal = false
+		}}
+		on:hardDelete={async () => {
+			if ($galleryStore.selectedImage?.path) {
+				await removeFile($galleryStore.selectedImage?.path)
+				deleteImage()
+			}
+			deleteModal = false
+		}}
+	/>
+{/if}
 
 <div class="flex h-screen w-full flex-col justify-start">
 	{#if imageDropping}
@@ -159,7 +186,7 @@
 		<div class="mt-10">
 			<Actions
 				on:upload={() => uploadFolder()}
-				on:deleteImage={() => askDeleteImage()}
+				on:deleteImage={() => (deleteModal = true)}
 				on:deleteTag={() => askDeleteTag()}
 			/>
 		</div>

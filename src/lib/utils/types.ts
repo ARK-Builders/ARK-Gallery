@@ -6,4 +6,5 @@ export type ImageType = {
 	size: number
 	lastModified: string | number
 	type: string
+	path: string
 }

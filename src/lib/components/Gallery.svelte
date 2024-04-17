@@ -11,7 +11,7 @@
 
 <div
 	class="w-full gap-3
-		{noImage ? 'flex flex-col items-center justify-center gap-5' : 'grid grid-flow-row justify-start'}"
+		{noImage ? 'flex flex-col items-center justify-center gap-5' : 'grid grid-flow-row justify-center'}"
 	style="grid-template-columns: repeat(auto-fill, {imageHeight}px);"
 >
 	{#if noImage}
