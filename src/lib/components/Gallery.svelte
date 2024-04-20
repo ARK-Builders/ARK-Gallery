@@ -5,13 +5,14 @@
 	import { faBan } from '@fortawesome/free-solid-svg-icons'
 
 	$: noImage = $galleryStore.selectedTag && !$galleryStore.selectedFilteredImages.length
+
+	$: imageHeight = $galleryStore.zoomLevel + 80
 </script>
 
 <div
-	class="w-full flex-1 gap-3 overflow-auto p-1
-		{noImage
-		? 'flex w-full flex-col items-center justify-center gap-5'
-		: 'grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6'}"
+	class="w-full gap-3
+		{noImage ? 'flex flex-col items-center justify-center gap-5' : 'grid grid-flow-row justify-start'}"
+	style="grid-template-columns: repeat(auto-fill, {imageHeight}px);"
 >
 	{#if noImage}
 		<Fa icon={faBan} size="5x" class="text-gray-400" />

@@ -11,7 +11,7 @@
 	$: hasImages = $galleryStore.images?.length
 </script>
 
-<div class="mt-10 flex flex-row justify-end gap-3">
+<div class="flex flex-row justify-end gap-3">
 	<Button
 		class="flex flex-row items-center gap-2 rounded-xl bg-blue-400 px-4 py-2 text-white hover:bg-blue-600 {!hasImages
 			? 'hidden'
