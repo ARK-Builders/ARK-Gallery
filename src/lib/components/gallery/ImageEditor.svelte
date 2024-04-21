@@ -10,7 +10,6 @@
 		faRotateRight,
 		faT
 	} from '@fortawesome/free-solid-svg-icons'
-
 	import ImageDetails from '$lib/components/gallery/ImageDetails.svelte'
 	import ActionButton from '$lib/components/gallery/ActionButton.svelte'
 	import Fa from 'svelte-fa'
@@ -20,6 +19,7 @@
 
 	export let showInfo = false
 
+	const ROTATE_90 = 'Rotate 90'
 	const ROTATE_RIGHT = 'Rotate Right'
 	const ROTATE_LEFT = 'Rotate Left'
 	const BLUR = 'Blur'
@@ -30,6 +30,9 @@
 	let activeAction: string = ''
 	let imageRef: HTMLImageElement | null = null
 	let blurLevel = 0
+
+	let rotate = false
+	let rotateValue = 0
 
 	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf($galleryStore.selectedImage?.id)
 
@@ -73,16 +76,20 @@
 		}
 	}
 	const rotateLeft = () => {
-		if (toggleAction(ROTATE_LEFT)) return
+		// if (toggleAction(ROTATE_LEFT)) return
 		activeAction = trimString(ROTATE_LEFT)
 		if (imageRef) {
+			rotateValue -= 90
+			imageRef.style.transform = `rotate(${rotateValue}deg)`
 		}
 	}
 
 	const rotateRight = () => {
-		if (toggleAction(ROTATE_RIGHT)) return
+		// if (toggleAction(ROTATE_RIGHT)) return
 		activeAction = trimString(ROTATE_RIGHT)
 		if (imageRef) {
+			rotateValue += 90
+			imageRef.style.transform = `rotate(${rotateValue}deg)`
 		}
 	}
 
@@ -100,16 +107,24 @@
 	<div class="flex w-36 flex-col gap-6 rounded-xl bg-white py-5 shadow-lg">
 		<ActionButton
 			isActive={activeAction}
-			text={ROTATE_LEFT}
+			text={ROTATE_90}
 			icon={faRotateLeft}
-			onClick={() => rotateLeft()}
+			onClick={() => (rotate = !rotate)}
 		/>
-		<ActionButton
-			isActive={activeAction}
-			text={ROTATE_RIGHT}
-			icon={faRotateRight}
-			onClick={() => rotateRight()}
-		/>
+		{#if rotate}
+			<ActionButton
+				isActive={activeAction}
+				text={ROTATE_LEFT}
+				icon={faRotateLeft}
+				onClick={() => rotateLeft()}
+			/>
+			<ActionButton
+				isActive={activeAction}
+				text={ROTATE_RIGHT}
+				icon={faRotateRight}
+				onClick={() => rotateRight()}
+			/>
+		{/if}
 		<ActionButton
 			isActive={activeAction}
 			text={BRUSH}
