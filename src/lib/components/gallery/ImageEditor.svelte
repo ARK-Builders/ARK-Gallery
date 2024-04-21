@@ -16,6 +16,7 @@
 	import Fa from 'svelte-fa'
 	import { replaceImageInTab } from '$lib/actions'
 	import { trimString } from '$lib/utils/tools'
+	import BlurImagePanel from './BlurImagePanel.svelte'
 
 	export let showInfo = false
 
@@ -27,6 +28,8 @@
 	const TEXT = 'Text'
 
 	let activeAction: string = ''
+	let imageRef: HTMLImageElement | null = null
+	let blurLevel = 0
 
 	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf($galleryStore.selectedImage?.id)
 
@@ -46,15 +49,20 @@
 		}
 	}
 
-	let imageRef: HTMLImageElement | null = null
-
 	const blurImage = () => {
 		activeAction = trimString(BLUR)
-		if (imageRef) {
-			imageRef.style.filter = 'blur(20px)'
-		}
+		setBlur()
 	}
 
+	const setBlur = (value?: number) => {
+		if (imageRef) {
+			const bv = blurLevel / 20
+			imageRef.style.filter = `blur(${bv}px)`
+			if (value == 0) {
+				imageRef.style.filter = 'blur(0px)'
+			}
+		}
+	}
 	const rotateLeft = () => {
 		activeAction = trimString(ROTATE_LEFT)
 		if (imageRef) {
@@ -66,6 +74,8 @@
 		if (imageRef) {
 		}
 	}
+
+	$: blurLevel ? setBlur() : setBlur(0)
 </script>
 
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
@@ -119,5 +129,9 @@
 
 	{#if showInfo}
 		<ImageDetails />
+	{/if}
+
+	{#if activeAction == trimString(BLUR)}
+		<BlurImagePanel bind:blurLevel />
 	{/if}
 </div>
