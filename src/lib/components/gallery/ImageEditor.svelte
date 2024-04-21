@@ -15,8 +15,18 @@
 	import ActionButton from '$lib/components/gallery/ActionButton.svelte'
 	import Fa from 'svelte-fa'
 	import { replaceImageInTab } from '$lib/actions'
+	import { trimString } from '$lib/utils/tools'
 
 	export let showInfo = false
+
+	const ROTATE_RIGHT = 'Rotate Right'
+	const ROTATE_LEFT = 'Rotate Left'
+	const BLUR = 'Blur'
+	const BRUSH = 'Brush'
+	const CROP = 'Crop'
+	const TEXT = 'Text'
+
+	let activeAction: string = ''
 
 	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf($galleryStore.selectedImage?.id)
 
@@ -35,16 +45,52 @@
 			replaceImageInTab($galleryStore.activeTabIndex)
 		}
 	}
+
+	let imageRef: HTMLImageElement | null = null
+
+	const blurImage = () => {
+		activeAction = trimString(BLUR)
+		if (imageRef) {
+			imageRef.style.filter = 'blur(20px)'
+		}
+	}
+
+	const rotateLeft = () => {
+		activeAction = trimString(ROTATE_LEFT)
+		if (imageRef) {
+		}
+	}
+
+	const rotateRight = () => {
+		activeAction = trimString(ROTATE_RIGHT)
+		if (imageRef) {
+		}
+	}
 </script>
 
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
 	<div class="flex w-36 flex-col gap-6 rounded-xl bg-white py-5 shadow-lg">
-		<ActionButton text="Rotate Left" icon={faRotateLeft} />
-		<ActionButton text="Rotate Right" icon={faRotateRight} />
-		<ActionButton text="Brush" icon={faPaintBrush} />
-		<ActionButton text="Blur" icon={faDroplet} />
-		<ActionButton text="Crop" icon={faCropSimple} />
-		<ActionButton text="Text" icon={faT} />
+		<ActionButton
+			isActive={activeAction}
+			text={ROTATE_LEFT}
+			icon={faRotateLeft}
+			onClick={() => rotateLeft()}
+		/>
+		<ActionButton
+			isActive={activeAction}
+			text={ROTATE_RIGHT}
+			icon={faRotateRight}
+			onClick={() => rotateRight()}
+		/>
+		<ActionButton text={BRUSH} icon={faPaintBrush} />
+		<ActionButton
+			isActive={activeAction}
+			text={BLUR}
+			icon={faDroplet}
+			onClick={() => blurImage()}
+		/>
+		<ActionButton text={CROP} icon={faCropSimple} />
+		<ActionButton text={TEXT} icon={faT} />
 	</div>
 
 	<div class="relative h-full max-h-[80vh] w-full">
@@ -56,6 +102,7 @@
 		</button>
 		{#if $galleryStore.selectedImage}
 			<img
+				bind:this={imageRef}
 				class="h-full w-full rounded-xl object-contain"
 				src={$galleryStore.selectedImage.src?.toString()}
 				alt={$galleryStore.selectedImage.name}
