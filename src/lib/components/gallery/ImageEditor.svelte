@@ -49,7 +49,16 @@
 		}
 	}
 
+	const toggleAction = (active: string) => {
+		if (activeAction == trimString(active)) {
+			activeAction = ''
+			return true
+		}
+		return false
+	}
+
 	const blurImage = () => {
+		if (toggleAction(BLUR)) return
 		activeAction = trimString(BLUR)
 		setBlur()
 	}
@@ -64,13 +73,22 @@
 		}
 	}
 	const rotateLeft = () => {
+		if (toggleAction(ROTATE_LEFT)) return
 		activeAction = trimString(ROTATE_LEFT)
 		if (imageRef) {
 		}
 	}
 
 	const rotateRight = () => {
+		if (toggleAction(ROTATE_RIGHT)) return
 		activeAction = trimString(ROTATE_RIGHT)
+		if (imageRef) {
+		}
+	}
+
+	const brushImage = () => {
+		if (toggleAction(BRUSH)) return
+		activeAction = trimString(BRUSH)
 		if (imageRef) {
 		}
 	}
@@ -92,7 +110,12 @@
 			icon={faRotateRight}
 			onClick={() => rotateRight()}
 		/>
-		<ActionButton text={BRUSH} icon={faPaintBrush} />
+		<ActionButton
+			isActive={activeAction}
+			text={BRUSH}
+			icon={faPaintBrush}
+			onClick={() => brushImage()}
+		/>
 		<ActionButton
 			isActive={activeAction}
 			text={BLUR}
@@ -105,6 +128,7 @@
 
 	<div class="relative h-full max-h-[80vh] w-full">
 		<button
+			class:hidden={activeAction}
 			on:click={() => prevImage()}
 			class="absolute left-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
 		>
@@ -120,6 +144,7 @@
 		{/if}
 
 		<button
+			class:hidden={activeAction}
 			on:click={() => nextImage()}
 			class="absolute right-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
 		>
