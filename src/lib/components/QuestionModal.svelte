@@ -3,24 +3,13 @@
 	import Fa from 'svelte-fa'
 	import { galleryStore } from '$lib/store'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { deleteImage, deleteTag, removeTag } from '$lib/actions'
 
 	const handleYes = () => {
-		if ($galleryStore.questionModalProp == 'deleteImage') {
-			deleteImage()
-		} else if ($galleryStore.questionModalProp == 'deleteTag') {
-			deleteTag()
-		} else if ($galleryStore.questionModalProp == 'removeTag') {
-			removeTag()
-		}
 		$galleryStore.modal = false
 	}
 
 	const handleNo = () => {
 		$galleryStore.modal = false
-		if (!$galleryStore.galleryView) {
-			$galleryStore.selectedImage = null
-		}
 	}
 </script>
 

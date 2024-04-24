@@ -11,7 +11,8 @@
 	import Fa from 'svelte-fa'
 	import Tooltip from '$lib/components/elements/Tooltip.svelte'
 	import { createEventDispatcher } from 'svelte'
-	import { askDeleteImage, removeImageFromTab } from '$lib/actions'
+	// import { askDeleteImage, removeImageFromTab } from '$lib/actions'
+	import { goto } from '$app/navigation'
 
 	export let showInfo = false
 
@@ -20,12 +21,12 @@
 
 <div class="flex flex-col">
 	<div class="mx-auto flex h-16 w-full max-w-7xl flex-row items-center gap-5 px-5">
-		<button class="" on:click={() => ($galleryStore.galleryView = false)}>
+		<button class="" on:click={() => goto("/")}>
 			<Fa icon={faHomeAlt} class="hover:text-gray-500" />
 		</button>
 
 		<div class="flex h-full flex-row gap-1 overflow-y-auto">
-			{#if $galleryStore.viewedImages?.length}
+			<!-- {#if $galleryStore.viewedImages?.length}
 				{#each $galleryStore.viewedImages as viewedImage, i}
 					<Tooltip>
 						<button
@@ -50,7 +51,7 @@
 						<span slot="tip-text">{viewedImage.name}</span>
 					</Tooltip>
 				{/each}
-			{/if}
+			{/if} -->
 		</div>
 	</div>
 	<div class="flex h-16 bg-blue-400 px-5 text-white">
@@ -67,9 +68,9 @@
 			>
 				<Fa icon={faInfoCircle} />
 			</button>
-			<button class="h-8" on:click={() => askDeleteImage()}>
+			<!-- <button class="h-8" on:click={() => askDeleteImage()}>
 				<Fa icon={faTrashAlt} />
-			</button>
+			</button> -->
 		</div>
 	</div>
 </div>

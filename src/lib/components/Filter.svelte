@@ -9,9 +9,8 @@
 		SelectTrigger
 	} from '$lib/components/ui/select'
 	import { type Selected } from 'bits-ui'
-	import { filterImageWithTag } from '$lib/actions'
 
-	export let filter: Selected<string> = { value: '' }
+	export let sort: Selected<string> = { value: '' }
 
 	const filters = [
 		{ value: 'date', label: 'date' },
@@ -20,51 +19,13 @@
 		{ value: 'size', label: 'size' },
 		{ value: 'tag', label: 'tag' }
 	]
-	let tmr: number
 
-	const updateFilter = async () => {
-		$galleryStore.selectedTag = ''
-		filterImageWithTag()
-		let _images = $galleryStore.images
-		$galleryStore.activeFilter = filter.value
-
-		switch (filter.value) {
-			case 'date':
-				_images.sort((a: File, b: File) => {
-					return a.lastModified - b.lastModified
-				})
-				break
-			case 'size':
-				_images.sort((a: File, b: File) => {
-					return a.size - b.size
-				})
-				break
-			case 'name':
-				_images.sort((a: File, b: File) => {
-					return ('' + a.name).localeCompare(b.name)
-				})
-				break
-			case 'tag':
-				_images.sort((a: any, b: any) => {
-					return ('' + a.tag).localeCompare(b.tag)
-				})
-				break
-			default:
-				break
-		}
-
-		if (tmr) clearTimeout(tmr)
-		tmr = setTimeout(() => {
-			$galleryStore.images = _images
-		}, 10)
-	}
-	$: filter, updateFilter()
 </script>
 
 <div class="flex w-full flex-row items-center rounded-full bg-white px-10 py-3 shadow-lg">
 	<p>Show:</p>
 
-	<Select bind:selected={filter}>
+	<Select bind:selected={sort}>
 		<SelectTrigger
 			asChild
 			let:builder
@@ -77,7 +38,7 @@
 				use:builder.action
 				{...builder}
 			>
-				{filter.value != '' ? 'By ' + filter.value : 'All Photos'}
+				{sort.value != '' ? 'By ' + sort.value : 'All Photos'}
 			</div>
 		</SelectTrigger>
 		<SelectContent>

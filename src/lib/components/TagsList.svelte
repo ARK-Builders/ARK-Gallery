@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { galleryStore } from '$lib/store'
 	import { onMount } from 'svelte'
 
 	let tags: string[] = []
@@ -7,22 +6,21 @@
 	onMount(() => {
 		let tagsData = localStorage.getItem('tags')
 		tags = JSON.parse(tagsData || '[]')
-		$galleryStore.tags = tags
+		// $galleryStore.tags = tags
 	})
 
-	const handleSelectTag = (tag: string) => {
-		if ($galleryStore.selectedTag == tag) {
-			$galleryStore.selectedTag = ''
-			$galleryStore.selectedFilteredImages = []
-		} else {
-			$galleryStore.selectedTag = tag
-			$galleryStore.selectedImage = null
-		}
-	}
+	// const handleSelectTag = (tag: string) => {
+	// 	if ($galleryStore.selectedTag == tag) {
+	// 		$galleryStore.selectedTag = ''
+	// 		$galleryStore.selectedFilteredImages = []
+	// 	} else {
+	// 		$galleryStore.selectedTag = tag
+	// 	}
+	// }
 </script>
 
 <div class="flex flex-row flex-wrap items-center gap-3">
-	{#if $galleryStore.activeFilter == 'tag' && $galleryStore.tags.length}
+	<!-- {#if $galleryStore.activeFilter == 'tag' && $galleryStore.tags.length}
 		{#each $galleryStore.tags as tag}
 			<button
 				on:click={() => handleSelectTag(tag)}
@@ -32,5 +30,5 @@
 				{tag}
 			</button>
 		{/each}
-	{/if}
+	{/if} -->
 </div>

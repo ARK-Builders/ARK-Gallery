@@ -3,10 +3,7 @@
 	import Filter from '$lib/components/Filter.svelte'
 	import Actions from '$lib/components/Actions.svelte'
 	import TagsList from '$lib/components/TagsList.svelte'
-	import Header from '$lib/components/gallery/Header.svelte'
 	import Footer from '$lib/components/Footer.svelte'
-	import ImageEditor from '$lib/components/gallery/ImageEditor.svelte'
-	import Slider from '$lib/components/ui/slider/slider.svelte'
 	import DeleteModal from '$lib/components/DeleteModal.svelte'
 
 	import { open } from '@tauri-apps/api/dialog'
@@ -16,11 +13,15 @@
 
 	import { makeid } from '$lib/utils/tools'
 	import { galleryStore } from '$lib/store'
-	import { askDeleteTag, deleteImage, filterImageWithTag } from '$lib/actions'
 
 	import type { ImageType } from '$lib/utils/types'
 
 	let imageDropping = false
+	let deleteModal = false
+	let images: ImageType[] = [];
+	let selectedImage: ImageType | null = null;
+	let sort = { value: '' }
+	let zoomLevel = [100]
 
 	listen('tauri://file-drop-hover', (e) => {
 		imageDropping = true
@@ -36,7 +37,7 @@
 		const payload = e.payload as string[]
 
 		const dirs = []
-		const images = []
+		const imgs = []
 
 		for (const file of payload) {
 			const metadata: {
@@ -50,13 +51,13 @@
 			if (metadata.file_type === 'directory') {
 				dirs.push(file)
 			} else {
-				images.push(file)
+				imgs.push(file)
 			}
 		}
 
-		dirs.length && (await loadDirs(dirs)).forEach((path) => images.push(path))
+		dirs.length && (await loadDirs(dirs)).forEach((path) => imgs.push(path))
 
-		$galleryStore.images = await loadImages(images)
+		$galleryStore.images = await loadImages(imgs)
 	})
 
 	const loadDirs = async (paths: string[]): Promise<string[]> => {
@@ -106,7 +107,7 @@
 					size: metadata.file_size,
 					lastModified: metadata.modified_time,
 					type: metadata.file_type,
-					tag: '' as string,
+					tags: [],
 					path: file
 				} as ImageType
 			})
@@ -136,36 +137,102 @@
 		}
 	}
 
-	$: if ($galleryStore.selectedTag) {
-		filterImageWithTag()
+
+	async function softDelete(file_path?: string) {
+		if (!file_path) return;
+
+		await invoke('move_file_to_trash', { filePath: file_path })
+
+		$galleryStore.images = $galleryStore.images.filter((img) => img.path !== file_path)
+
+		deleteModal = false
 	}
 
-	let showInfo = false
+	async function hardDelete(file_path?: string) {
+		if (!file_path) return;
 
-	let deleteModal = false
+		await removeFile(file_path)
+
+		$galleryStore.images = $galleryStore.images.filter((img) => img.path !== file_path)
+
+
+		deleteModal = false
+	}
+
+	function abortDelete() {
+		deleteModal = false
+	}
+
+	function insertTag(id: string, tag: string) {
+		const image = $galleryStore.images.find((img) => img.id === id)
+
+		if (image) {
+			if (!image.tags.includes(tag)) {
+				image.tags.push(tag)
+			}
+		}
+
+		$galleryStore.images = [...$galleryStore.images]
+	}
+
+	function deleteTag(id: string, tag: string) {
+		const image = $galleryStore.images.find((img) => img.id === id)
+
+		if (image) {
+			image.tags = image.tags.filter((t) => t !== tag)
+		}
+		$galleryStore.images = [...$galleryStore.images]
+
+	}
+	
+	
+	$: {
+		switch (sort.value) {
+			case 'date':
+				images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
+					return Number(a.lastModified) - Number(b.lastModified);
+				})
+				break
+			case 'size':
+			images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
+					return a.size - b.size
+				})
+				break
+			case 'name':
+			images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
+					return ('' + a.name).localeCompare(b.name)
+				})
+				break
+			case 'tag':
+			images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
+					return a.tags.length - b.tags.length
+				})
+				break
+			default:
+				images = $galleryStore.images
+				break
+		}
+	}
+	
+
+
 </script>
 
 <svelte:head>
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
 
-{#if deleteModal}
+{#if deleteModal && selectedImage}
 	<DeleteModal
 		show={deleteModal}
-		on:abort={() => {
-			deleteModal = false
-		}}
+		on:abort={abortDelete}
 		on:softDelete={async () => {
-			await invoke('move_file_to_trash', { filePath: $galleryStore.selectedImage?.path })
-			deleteImage()
-			deleteModal = false
+			if (selectedImage) softDelete(selectedImage.path)
+			
 		}}
 		on:hardDelete={async () => {
-			if ($galleryStore.selectedImage?.path) {
-				await removeFile($galleryStore.selectedImage?.path)
-				deleteImage()
-			}
-			deleteModal = false
+			if (selectedImage) hardDelete(selectedImage.path)
+
 		}}
 	/>
 {/if}
@@ -179,30 +246,31 @@
 		</div>
 	{/if}
 	<div
-		class:hidden={$galleryStore.galleryView}
 		class="mx-auto flex h-full w-full max-w-7xl flex-col justify-start p-5"
 	>
-		<Filter />
+		<Filter bind:sort />
 		<div class="mt-10">
 			<Actions
 				on:upload={() => uploadFolder()}
 				on:deleteImage={() => (deleteModal = true)}
-				on:deleteTag={() => askDeleteTag()}
+				on:deleteTag={() => {
+					// TODO: fixme
+				}}
 			/>
 		</div>
 		<div class="my-5">
 			<TagsList />
 		</div>
 		<div class="flex-1 overflow-auto p-1">
-			<Gallery />
+			<Gallery {images} {zoomLevel} {selectedImage} on:newTag={(e) => {
+				insertTag(e.detail.id, e.detail.tag)
+			}} on:deleteTag={(e) => {
+				deleteTag(e.detail.id, e.detail.tag)
+			}} />
 		</div>
 
 		<div class="flex flex-col items-end justify-center pt-4">
-			<Footer />
+			<Footer bind:zoomLevel />
 		</div>
-	</div>
-	<div class:hidden={!$galleryStore.galleryView}>
-		<Header bind:showInfo />
-		<ImageEditor bind:showInfo />
 	</div>
 </div>
