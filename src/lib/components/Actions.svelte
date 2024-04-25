@@ -12,14 +12,6 @@
 
 <!-- // TODO: FIXME -->
 <div class="flex flex-row justify-end gap-3">
-	<Button
-		class="flex flex-row items-center gap-2 rounded-xl bg-blue-400 px-4 py-2 text-white hover:bg-blue-600 {!hasImages
-			? 'hidden'
-			: ''}"
-	>
-		<Fa icon={faTag} />
-		<span>Add tag to image</span>
-	</Button>
 	<Tooltip>
 		<Button
 			slot="tip-trigger"
@@ -30,18 +22,6 @@
 			<span>Select images</span>
 		</Button>
 		<p slot="tip-text">Select images folder</p>
-	</Tooltip>
-
-	<Tooltip hidden={false}> 
-		<Button
-			slot="tip-trigger"
-			variant={'outline'}
-			on:click={() => dispatch('deleteTag')}
-			class="rounded-lg bg-gray-200 px-3"
-		>
-			<Fa icon={faTrashAlt} />
-		</Button>
-		<p slot="tip-text">Delete tag</p>
 	</Tooltip>
 
 	<Tooltip>

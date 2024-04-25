@@ -43,44 +43,41 @@
 	let deleteModal = false
 </script>
 
-{#if deleteModal && tabs[activeTab]}
-	<DeleteModal
-		show={deleteModal}
-		on:abort={() => {
+<DeleteModal
+	show={deleteModal}
+	on:abort={() => {
+		deleteModal = false
+	}}
+	on:softDelete={async () => {
+		if (tabs[activeTab]?.path) {
+			await invoke('move_file_to_trash', { filePath: tabs[activeTab].path })
+			$galleryStore.images = $galleryStore.images.filter(
+				(img) => tabs[activeTab] && img.path !== tabs[activeTab].path
+			)
 			deleteModal = false
-		}}
-		on:softDelete={async () => {
-			if (tabs[activeTab]?.path) {
-				await invoke('move_file_to_trash', { filePath: tabs[activeTab].path })
-				$galleryStore.images = $galleryStore.images.filter(
-					(img) => tabs[activeTab] && img.path !== tabs[activeTab].path
-				)
-				deleteModal = false
-				next()
-			}
-		}}
-		on:hardDelete={async () => {
-			if (tabs[activeTab]?.path) {
-				await removeFile(tabs[activeTab].path)
-				$galleryStore.images = $galleryStore.images.filter(
-					(img) => tabs[activeTab] && img.path !== tabs[activeTab].path
-				)
-				deleteModal = false
-				next()
-			}
-		}}
-	/>
-{/if}
+			next()
+		}
+	}}
+	on:hardDelete={async () => {
+		if (tabs[activeTab]?.path) {
+			await removeFile(tabs[activeTab].path)
+			$galleryStore.images = $galleryStore.images.filter(
+				(img) => tabs[activeTab] && img.path !== tabs[activeTab].path
+			)
+			deleteModal = false
+			next()
+		}
+	}}
+/>
 
 <div class="flex h-screen w-full flex-col justify-start">
-	<Header on:delete={() => {
-		deleteModal = true
-	}} bind:tabs bind:activeTab bind:showInfo />
-	<ImageEditor
-		on:next={next}
-		on:previous={previous}
-		
-		image={tabs[activeTab]}
+	<Header
+		on:delete={() => {
+			deleteModal = true
+		}}
+		bind:tabs
+		bind:activeTab
 		bind:showInfo
 	/>
+	<ImageEditor on:next={next} on:previous={previous} image={tabs[activeTab]} bind:showInfo />
 </div>

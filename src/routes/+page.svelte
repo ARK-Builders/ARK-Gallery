@@ -139,7 +139,6 @@
 		}
 	}
 
-
 	function insertTag(id: string, tag: string) {
 		const image = $galleryStore.images.find((img) => img.id === id)
 
@@ -188,34 +187,37 @@
 				break
 		}
 	}
+
 </script>
 
 <svelte:head>
 	<title>ARK Gallery 1.0</title>
 </svelte:head>
 
-{#if deleteModal && selectedImage}
-	<DeleteModal
-		show={deleteModal}
-		on:abort={() => {deleteModal = false}}
-		on:softDelete={async () => {
-			if (selectedImage?.path) {
-				await invoke('move_file_to_trash', { filePath: selectedImage.path })
-				$galleryStore.images = $galleryStore.images.filter(
-					(img) => selectedImage && img.path !== selectedImage.path
-				)
-				deleteModal = false
-			}
-		}}
-		on:hardDelete={async () => {
-			if (selectedImage?.path) {
-				await removeFile(selectedImage.path)
-				$galleryStore.images = $galleryStore.images.filter((img) => selectedImage && img.path !== selectedImage.path)
-				deleteModal = false
-			}
-		}}
-	/>
-{/if}
+<DeleteModal
+	show={deleteModal}
+	on:abort={() => {
+		deleteModal = false
+	}}
+	on:softDelete={async () => {
+		if (selectedImage?.path) {
+			await invoke('move_file_to_trash', { filePath: selectedImage.path })
+			$galleryStore.images = $galleryStore.images.filter(
+				(img) => selectedImage && img.path !== selectedImage.path
+			)
+			deleteModal = false
+		}
+	}}
+	on:hardDelete={async () => {
+		if (selectedImage?.path) {
+			await removeFile(selectedImage.path)
+			$galleryStore.images = $galleryStore.images.filter(
+				(img) => selectedImage && img.path !== selectedImage.path
+			)
+			deleteModal = false
+		}
+	}}
+/>
 
 <div class="flex h-screen w-full flex-col justify-start">
 	{#if imageDropping}
@@ -229,11 +231,9 @@
 		<Filter bind:sort />
 		<div class="mt-10">
 			<Actions
+				hasImages={$galleryStore.images.length > 0}
 				on:upload={() => uploadFolder()}
-				on:deleteImage={() => (deleteModal = true)}
-				on:deleteTag={() => {
-					// TODO: fixme
-				}}
+				on:deleteImage={() => {deleteModal = true}}
 			/>
 		</div>
 		<div class="my-5">
