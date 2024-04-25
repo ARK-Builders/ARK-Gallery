@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { flip } from 'svelte/animate'
-	import { quintOut } from 'svelte/easing'
+
 	import { goto } from '$app/navigation'
 	import type { ImageType } from '$lib/utils/types'
 	import { faPlus } from '@fortawesome/free-solid-svg-icons'
-	import { createEventDispatcher } from 'svelte'
+	import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 	import Fa from 'svelte-fa'
+	import { createEventDispatcher } from 'svelte'
 
 	export let isSelected = false
 	export let image: ImageType
@@ -36,28 +36,39 @@
 	/>
 	{#if hasHover}
 		<div class="absolute bottom-0 left-0 right-0 z-10 translate-y-full">
+			<div
+				class="flex w-full items-center justify-start gap-1 bg-white px-2 text-black first:rounded-t-md last:rounded-b-md"
+			>
+				<span class="left-1 text-lg">#</span>
+				<input
+					bind:value={newTag}
+					type="text"
+					class="w-full flex-1 bg-transparent focus:outline-none"
+				/>
+				<button
+					on:click={() => {
+						dispatch('newTag', newTag)
+						newTag = ''
+					}}
+				>
+					<Fa icon={faPlus} />
+				</button>
+			</div>
 			{#each image.tags as tag (tag)}
-				<div>{tag}</div>
+				<div
+					class="flex w-full items-center justify-start gap-1 bg-white px-2 text-black first:rounded-t-md last:rounded-b-md"
+				>
+					<span class="left-1 text-lg">#</span>
+					<span class="w-full flex-1 text-left bg-transparent focus:outline-none">{tag}</span>
+					<button
+						on:click={() => {
+							dispatch('deleteTag', tag)
+						}}
+					>
+						<Fa icon={faTrashAlt} />
+					</button>
+				</div>
 			{/each}
 		</div>
 	{/if}
-	<div
-		class:hidden={!hasHover}
-		class="absolute bottom-0 flex w-full items-center justify-start gap-1 bg-white px-2 text-black"
-	>
-		<span class="left-1 text-lg">#</span>
-		<input
-			bind:value={newTag}
-			type="text"
-			class="w-full flex-1 bg-transparent focus:outline-none"
-		/>
-		<button
-			on:click={() => {
-				dispatch('newTag', newTag)
-				newTag = ''
-			}}
-		>
-			<Fa icon={faPlus} />
-		</button>
-	</div>
 </button>

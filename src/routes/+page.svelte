@@ -15,12 +15,14 @@
 	import { galleryStore } from '$lib/store'
 
 	import type { ImageType } from '$lib/utils/types'
+	import { path } from '@tauri-apps/api'
 
 	let imageDropping = false
 	let deleteModal = false
-	let images: ImageType[] = [];
-	let selectedImage: ImageType | null = null;
+	let images: ImageType[] = []
+	let selectedImage: ImageType | null = null
 	let sort = { value: '' }
+	let selectedTags: string[] = []
 	let zoomLevel = [100]
 
 	listen('tauri://file-drop-hover', (e) => {
@@ -138,31 +140,6 @@
 	}
 
 
-	async function softDelete(file_path?: string) {
-		if (!file_path) return;
-
-		await invoke('move_file_to_trash', { filePath: file_path })
-
-		$galleryStore.images = $galleryStore.images.filter((img) => img.path !== file_path)
-
-		deleteModal = false
-	}
-
-	async function hardDelete(file_path?: string) {
-		if (!file_path) return;
-
-		await removeFile(file_path)
-
-		$galleryStore.images = $galleryStore.images.filter((img) => img.path !== file_path)
-
-
-		deleteModal = false
-	}
-
-	function abortDelete() {
-		deleteModal = false
-	}
-
 	function insertTag(id: string, tag: string) {
 		const image = $galleryStore.images.find((img) => img.id === id)
 
@@ -182,30 +159,28 @@
 			image.tags = image.tags.filter((t) => t !== tag)
 		}
 		$galleryStore.images = [...$galleryStore.images]
-
 	}
-	
-	
+
 	$: {
 		switch (sort.value) {
 			case 'date':
 				images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
-					return Number(a.lastModified) - Number(b.lastModified);
+					return Number(a.lastModified) - Number(b.lastModified)
 				})
 				break
 			case 'size':
-			images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
+				images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
 					return a.size - b.size
 				})
 				break
 			case 'name':
-			images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
+				images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
 					return ('' + a.name).localeCompare(b.name)
 				})
 				break
 			case 'tag':
-			images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
-					return a.tags.length - b.tags.length
+				images = $galleryStore.images.filter((img) => {
+					return img.tags.some((tag) => selectedTags.includes(tag))
 				})
 				break
 			default:
@@ -213,9 +188,6 @@
 				break
 		}
 	}
-	
-
-
 </script>
 
 <svelte:head>
@@ -225,14 +197,22 @@
 {#if deleteModal && selectedImage}
 	<DeleteModal
 		show={deleteModal}
-		on:abort={abortDelete}
+		on:abort={() => {deleteModal = false}}
 		on:softDelete={async () => {
-			if (selectedImage) softDelete(selectedImage.path)
-			
+			if (selectedImage?.path) {
+				await invoke('move_file_to_trash', { filePath: selectedImage.path })
+				$galleryStore.images = $galleryStore.images.filter(
+					(img) => selectedImage && img.path !== selectedImage.path
+				)
+				deleteModal = false
+			}
 		}}
 		on:hardDelete={async () => {
-			if (selectedImage) hardDelete(selectedImage.path)
-
+			if (selectedImage?.path) {
+				await removeFile(selectedImage.path)
+				$galleryStore.images = $galleryStore.images.filter((img) => selectedImage && img.path !== selectedImage.path)
+				deleteModal = false
+			}
 		}}
 	/>
 {/if}
@@ -245,9 +225,7 @@
 			<p class="text-2xl font-bold text-white">Drop your images here</p>
 		</div>
 	{/if}
-	<div
-		class="mx-auto flex h-full w-full max-w-7xl flex-col justify-start p-5"
-	>
+	<div class="mx-auto flex h-full w-full max-w-7xl flex-col justify-start p-5">
 		<Filter bind:sort />
 		<div class="mt-10">
 			<Actions
@@ -259,14 +237,23 @@
 			/>
 		</div>
 		<div class="my-5">
-			<TagsList />
+			{#if sort.value === 'tag'}
+				<TagsList bind:selectedTags />
+			{/if}
 		</div>
+
 		<div class="flex-1 overflow-auto p-1">
-			<Gallery {images} {zoomLevel} {selectedImage} on:newTag={(e) => {
-				insertTag(e.detail.id, e.detail.tag)
-			}} on:deleteTag={(e) => {
-				deleteTag(e.detail.id, e.detail.tag)
-			}} />
+			<Gallery
+				{images}
+				{zoomLevel}
+				bind:selectedImage
+				on:newTag={(e) => {
+					insertTag(e.detail.id, e.detail.tag)
+				}}
+				on:deleteTag={(e) => {
+					deleteTag(e.detail.id, e.detail.tag)
+				}}
+			/>
 		</div>
 
 		<div class="flex flex-col items-end justify-center pt-4">
