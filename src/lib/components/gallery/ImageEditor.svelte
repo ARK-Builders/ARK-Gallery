@@ -16,6 +16,7 @@
 	import { replaceImageInTab } from '$lib/actions'
 	import { trimString } from '$lib/utils/tools'
 	import BlurImagePanel from './BlurImagePanel.svelte'
+	import ImageJs, { Image } from 'image-js'
 
 	export let showInfo = false
 
@@ -33,8 +34,26 @@
 
 	let rotate = false
 	let rotateValue = 0
+	let isEditing = false
+	let imageObj: Image | null = null
 
 	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf($galleryStore.selectedImage?.id)
+
+	$: if ($galleryStore.selectedImage?.src) {
+		loadImage()
+	}
+
+	const loadImage = async () => {
+		if ($galleryStore.selectedImage?.src) {
+			imageObj = await ImageJs.load($galleryStore.selectedImage?.src)
+		}
+	}
+
+	const saveImage = () => {
+		if (imageObj) {
+			imageObj.save('temp.jpg')
+		}
+	}
 
 	const prevImage = () => {
 		if (idx && $galleryStore.images.length > 0) {
@@ -73,6 +92,7 @@
 			if (value == 0) {
 				imageRef.style.filter = 'blur(0px)'
 			}
+			isEditing = true
 		}
 	}
 	const rotateLeft = () => {
@@ -81,6 +101,8 @@
 		if (imageRef) {
 			rotateValue -= 90
 			imageRef.style.transform = `rotate(${rotateValue}deg)`
+			isEditing = true
+			if (Math.abs(rotateValue) == 360) rotateValue = 0
 		}
 	}
 
@@ -90,6 +112,8 @@
 		if (imageRef) {
 			rotateValue += 90
 			imageRef.style.transform = `rotate(${rotateValue}deg)`
+			if (Math.abs(rotateValue) == 360) rotateValue = 0
+			isEditing = true
 		}
 	}
 
@@ -97,7 +121,13 @@
 		if (toggleAction(BRUSH)) return
 		activeAction = trimString(BRUSH)
 		if (imageRef) {
+			isEditing = true
 		}
+	}
+
+	const resetImage = () => {
+		isEditing = false
+		activeAction = ''
 	}
 
 	$: blurLevel ? setBlur() : setBlur(0)
@@ -141,7 +171,24 @@
 		<ActionButton text={TEXT} icon={faT} />
 	</div>
 
-	<div class="relative h-full max-h-[80vh] w-full">
+	<div
+		class="relative flex h-full max-h-[80vh] w-full justify-center
+	{[90, 270].includes(Math.abs(rotateValue)) && 'top-36 h-[75%]'}"
+	>
+		<div class:hidden={!isEditing} class="absolute right-5 top-2 z-10 flex flex-row gap-2">
+			<button
+				on:click={() => resetImage()}
+				class="flex items-center rounded-lg bg-white px-3 py-1 text-gray-700 hover:bg-gray-100 hover:text-black"
+			>
+				Reset
+			</button>
+			<button
+				class="flex items-center rounded-lg bg-blue-400 px-3 py-1 text-white hover:bg-blue-300"
+			>
+				Apply
+			</button>
+		</div>
+
 		<button
 			class:hidden={activeAction}
 			on:click={() => prevImage()}
@@ -152,7 +199,7 @@
 		{#if $galleryStore.selectedImage}
 			<img
 				bind:this={imageRef}
-				class="h-full w-full rounded-xl object-contain"
+				class="rounded-xl object-contain"
 				src={$galleryStore.selectedImage.src?.toString()}
 				alt={$galleryStore.selectedImage.name}
 			/>
