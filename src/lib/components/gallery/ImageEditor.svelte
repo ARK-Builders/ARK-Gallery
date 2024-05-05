@@ -173,7 +173,7 @@
 
 	<div
 		class="relative flex h-full max-h-[80vh] w-full justify-center
-	{[90, 270].includes(Math.abs(rotateValue)) && 'top-36 h-[75%]'}"
+	{[90, 270].includes(Math.abs(rotateValue)) && 'top-20 h-[80%]'}"
 	>
 		<div class:hidden={!isEditing} class="absolute right-5 top-2 z-10 flex flex-row gap-2">
 			<button
