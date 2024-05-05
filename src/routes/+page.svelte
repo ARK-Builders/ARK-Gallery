@@ -171,8 +171,10 @@
 			<Footer />
 		</div>
 	</div>
-	<div class:hidden={!$galleryStore.galleryView}>
-		<Header bind:showInfo />
-		<ImageEditor bind:showInfo />
-	</div>
+	{#if $galleryStore.galleryView}
+		<div>
+			<Header bind:showInfo />
+			<ImageEditor bind:showInfo />
+		</div>
+	{/if}
 </div>

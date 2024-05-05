@@ -17,6 +17,8 @@
 	import { trimString } from '$lib/utils/tools'
 	import BlurImagePanel from './BlurImagePanel.svelte'
 	import ImageJs, { Image } from 'image-js'
+	import type { ImageType } from '$lib/utils/types'
+	import { onDestroy } from 'svelte'
 
 	export let showInfo = false
 
@@ -36,6 +38,7 @@
 	let rotateValue = 0
 	let isEditing = false
 	let imageObj: Image | null = null
+	let editImageRef: ImageType | null
 
 	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf($galleryStore.selectedImage?.id)
 
@@ -82,6 +85,7 @@
 	const blurImage = () => {
 		if (toggleAction(BLUR)) return
 		activeAction = trimString(BLUR)
+		enableEditing()
 		setBlur()
 	}
 
@@ -92,16 +96,15 @@
 			if (value == 0) {
 				imageRef.style.filter = 'blur(0px)'
 			}
-			isEditing = true
 		}
 	}
 	const rotateLeft = () => {
 		// if (toggleAction(ROTATE_LEFT)) return
 		activeAction = trimString(ROTATE_LEFT)
 		if (imageRef) {
+			enableEditing()
 			rotateValue -= 90
 			imageRef.style.transform = `rotate(${rotateValue}deg)`
-			isEditing = true
 			if (Math.abs(rotateValue) == 360) rotateValue = 0
 		}
 	}
@@ -110,27 +113,39 @@
 		// if (toggleAction(ROTATE_RIGHT)) return
 		activeAction = trimString(ROTATE_RIGHT)
 		if (imageRef) {
+			enableEditing()
 			rotateValue += 90
 			imageRef.style.transform = `rotate(${rotateValue}deg)`
 			if (Math.abs(rotateValue) == 360) rotateValue = 0
-			isEditing = true
 		}
 	}
 
 	const brushImage = () => {
 		if (toggleAction(BRUSH)) return
 		activeAction = trimString(BRUSH)
-		if (imageRef) {
+		enableEditing()
+	}
+
+	const enableEditing = () => {
+		if (imageRef && !isEditing) {
 			isEditing = true
+			editImageRef = $galleryStore.selectedImage
 		}
 	}
 
 	const resetImage = () => {
 		isEditing = false
 		activeAction = ''
+		editImageRef = null
 	}
 
 	$: blurLevel ? setBlur() : setBlur(0)
+
+	onDestroy(() => {
+		resetImage()
+	})
+
+	// $: console.log(editImageRef)
 </script>
 
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
@@ -200,7 +215,9 @@
 			<img
 				bind:this={imageRef}
 				class="rounded-xl object-contain"
-				src={$galleryStore.selectedImage.src?.toString()}
+				src={isEditing
+					? editImageRef?.src?.toString()
+					: $galleryStore.selectedImage.src?.toString()}
 				alt={$galleryStore.selectedImage.name}
 			/>
 		{/if}
