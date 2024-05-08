@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { faImage, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
-	import { faTag, faTrash } from '@fortawesome/free-solid-svg-icons'
 	import { Button } from '$lib/components/ui/button'
 	import Tooltip from '$lib/components/elements/Tooltip.svelte'
 	import { createEventDispatcher } from 'svelte'
@@ -33,7 +32,7 @@
 			on:click={() => dispatch('deleteImage')}
 			class="rounded-lg bg-gray-200 px-3 {!hasImages ? 'hidden' : ''}"
 		>
-			<Fa icon={faTrash} />
+			<Fa icon={faTrashAlt} />
 		</Button>
 		<p slot="tip-text">Delete image</p>
 	</Tooltip>
