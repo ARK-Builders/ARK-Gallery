@@ -8,7 +8,8 @@
 	export let text: string = ''
 	export let icon: IconDefinition | null = null
 	export let onClick: Method | null = null
-	export let isActive: String = ''
+	export let isActive: string = ''
+	export let borderDown: boolean = false
 
 	let hover = false
 </script>
@@ -17,7 +18,7 @@
 	on:mouseenter={() => (hover = true)}
 	on:mouseleave={() => (hover = false)}
 	class="flex flex-col items-center gap-3 hover:text-gray-500
-	{isActive == trimString(text) ? 'border-l-[3px] border-blue-500' : ''}"
+	{isActive == trimString(text) && !borderDown ? 'border-l-[3px] border-blue-500' : ''}"
 	on:click={() => (onClick ? onClick() : '')}
 >
 	{#if icon}
@@ -25,4 +26,8 @@
 	{/if}
 
 	<span class="text-sm font-light">{text}</span>
+	<span
+		class="h-[2px] w-[50%]
+	{borderDown && isActive == trimString(text) ? 'border-b-[1.5px] border-blue-500' : ''}"
+	/>
 </button>

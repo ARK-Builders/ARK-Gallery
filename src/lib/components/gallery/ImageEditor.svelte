@@ -135,6 +135,11 @@
 		}
 	}
 
+	const toggleRotate = () => {
+		rotate = !rotate
+		if (activeAction) activeAction = ''
+	}
+
 	$: blurLevel ? setBlur() : setBlur(0)
 
 	onDestroy(() => {
@@ -145,19 +150,21 @@
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
 	<div class="flex w-36 flex-col gap-6 rounded-xl bg-white py-5 shadow-lg">
 		<ActionButton
-			isActive={activeAction}
+			isActive={rotate ? trimString('Rotate 90°') : ''}
 			text={ROTATE_90}
 			icon={faRotateRight}
-			onClick={() => (rotate = !rotate)}
+			onClick={() => toggleRotate()}
 		/>
 		{#if rotate}
 			<ActionButton
+				borderDown
 				isActive={activeAction}
 				text={ROTATE_LEFT}
 				icon={faRotateLeft}
 				onClick={() => rotateLeft()}
 			/>
 			<ActionButton
+				borderDown
 				isActive={activeAction}
 				text={ROTATE_RIGHT}
 				icon={faRotateRight}
