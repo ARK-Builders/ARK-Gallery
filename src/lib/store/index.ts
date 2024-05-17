@@ -15,7 +15,8 @@ const galleryInterface = {
 	activeFilter: '',
 	galleryView: false as boolean,
 	viewedImages: [] as ImageType[],
-	activeTabIndex: null as unknown as number
+	activeTabIndex: null as unknown as number,
+	isEditing: false
 }
 
 export const galleryStore = writable(galleryInterface)

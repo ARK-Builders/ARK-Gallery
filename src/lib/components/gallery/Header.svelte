@@ -2,6 +2,7 @@
 	import { galleryStore } from '$lib/store'
 	import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 	import {
+		faDownload,
 		faHomeAlt,
 		faInfoCircle,
 		faMultiply,
@@ -70,6 +71,11 @@
 			<button class="h-8" on:click={() => askDeleteImage()}>
 				<Fa icon={faTrashAlt} />
 			</button>
+			<!-- {#if $galleryStore.isEditing}
+				<button class="h-8">
+					<Fa icon={faDownload} />
+				</button>
+			{/if} -->
 		</div>
 	</div>
 </div>

@@ -22,9 +22,9 @@
 
 	export let showInfo = false
 
-	const ROTATE_90 = 'Rotate 90'
-	const ROTATE_RIGHT = 'Rotate Right'
-	const ROTATE_LEFT = 'Rotate Left'
+	const ROTATE_90 = 'Rotate 90°'
+	const ROTATE_RIGHT = '90° Right'
+	const ROTATE_LEFT = '90° Left'
 	const BLUR = 'Blur'
 	const BRUSH = 'Brush'
 	const CROP = 'Crop'
@@ -36,26 +36,20 @@
 
 	let rotate = false
 	let rotateValue = 0
-	let isEditing = false
 	let imageObj: Image | null = null
 	let editImageRef: ImageType | null
 
 	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf($galleryStore.selectedImage?.id)
 
-	$: if ($galleryStore.selectedImage?.src) {
-		loadImage()
-	}
-
 	const loadImage = async () => {
 		if ($galleryStore.selectedImage?.src) {
+			// Load image with image-js for further other functionality
 			imageObj = await ImageJs.load($galleryStore.selectedImage?.src)
 		}
 	}
 
-	const saveImage = () => {
-		if (imageObj) {
-			imageObj.save('temp.jpg')
-		}
+	if ($galleryStore.selectedImage?.src) {
+		loadImage()
 	}
 
 	const prevImage = () => {
@@ -99,7 +93,6 @@
 		}
 	}
 	const rotateLeft = () => {
-		// if (toggleAction(ROTATE_LEFT)) return
 		activeAction = trimString(ROTATE_LEFT)
 		if (imageRef) {
 			enableEditing()
@@ -110,7 +103,6 @@
 	}
 
 	const rotateRight = () => {
-		// if (toggleAction(ROTATE_RIGHT)) return
 		activeAction = trimString(ROTATE_RIGHT)
 		if (imageRef) {
 			enableEditing()
@@ -127,16 +119,20 @@
 	}
 
 	const enableEditing = () => {
-		if (imageRef && !isEditing) {
-			isEditing = true
+		if (imageRef && !$galleryStore.isEditing) {
+			$galleryStore.isEditing = true
 			editImageRef = $galleryStore.selectedImage
 		}
 	}
 
 	const resetImage = () => {
-		isEditing = false
+		$galleryStore.isEditing = false
 		activeAction = ''
 		editImageRef = null
+		if (imageRef) {
+			imageRef.style.filter = `blur(${0}px)`
+			imageRef.style.transform = `rotate(0deg)`
+		}
 	}
 
 	$: blurLevel ? setBlur() : setBlur(0)
@@ -144,8 +140,6 @@
 	onDestroy(() => {
 		resetImage()
 	})
-
-	// $: console.log(editImageRef)
 </script>
 
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
@@ -153,7 +147,7 @@
 		<ActionButton
 			isActive={activeAction}
 			text={ROTATE_90}
-			icon={faRotateLeft}
+			icon={faRotateRight}
 			onClick={() => (rotate = !rotate)}
 		/>
 		{#if rotate}
@@ -190,7 +184,10 @@
 		class="relative flex h-full max-h-[80vh] w-full justify-center
 	{[90, 270].includes(Math.abs(rotateValue)) && 'top-20 h-[80%]'}"
 	>
-		<div class:hidden={!isEditing} class="absolute right-5 top-2 z-10 flex flex-row gap-2">
+		<div
+			class:hidden={!$galleryStore.isEditing}
+			class="absolute right-5 top-2 z-10 flex flex-row gap-2"
+		>
 			<button
 				on:click={() => resetImage()}
 				class="flex items-center rounded-lg bg-white px-3 py-1 text-gray-700 hover:bg-gray-100 hover:text-black"
@@ -215,7 +212,7 @@
 			<img
 				bind:this={imageRef}
 				class="rounded-xl object-contain"
-				src={isEditing
+				src={$galleryStore.isEditing
 					? editImageRef?.src?.toString()
 					: $galleryStore.selectedImage.src?.toString()}
 				alt={$galleryStore.selectedImage.name}
