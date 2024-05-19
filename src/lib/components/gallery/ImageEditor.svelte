@@ -153,6 +153,13 @@
 	onDestroy(() => {
 		resetImage()
 	})
+
+	const applyChanges = () => {
+		// TODO: implement apply image chanages
+		rotate = false
+		activeAction = ''
+		$galleryStore.isEditing = false
+	}
 </script>
 
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
@@ -233,6 +240,7 @@
 				Reset
 			</button>
 			<button
+				on:click={() => applyChanges()}
 				class="flex items-center rounded-lg bg-blue-400 px-3 py-1 text-white hover:bg-blue-300"
 			>
 				Apply
