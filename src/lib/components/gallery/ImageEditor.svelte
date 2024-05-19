@@ -6,6 +6,7 @@
 		faCropSimple,
 		faDroplet,
 		faPaintBrush,
+		faRotate,
 		faRotateLeft,
 		faRotateRight,
 		faT
@@ -130,6 +131,7 @@
 		activeAction = ''
 		editImageRef = null
 		if (imageRef) {
+			rotateValue = 0
 			imageRef.style.filter = `blur(${0}px)`
 			imageRef.style.transform = `rotate(0deg)`
 		}
@@ -137,10 +139,16 @@
 
 	const toggleRotate = () => {
 		rotate = !rotate
-		if (activeAction) activeAction = ''
+		if (rotate) activeAction = trimString(ROTATE_90)
+		else activeAction = ''
 	}
 
 	$: blurLevel ? setBlur() : setBlur(0)
+	// To handle active rotate state and remove active state on click other operation
+	$: rotate &&
+	![trimString(ROTATE_LEFT), trimString(ROTATE_90), trimString(ROTATE_RIGHT)].includes(activeAction)
+		? (rotate = false)
+		: ''
 
 	onDestroy(() => {
 		resetImage()
@@ -150,9 +158,9 @@
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
 	<div class="flex w-36 flex-col gap-6 rounded-xl bg-white py-5 shadow-lg">
 		<ActionButton
-			isActive={rotate ? trimString('Rotate 90°') : ''}
+			isActive={rotate ? trimString(ROTATE_90) : ''}
 			text={ROTATE_90}
-			icon={faRotateRight}
+			icon={faRotate}
 			onClick={() => toggleRotate()}
 		/>
 		{#if rotate}
@@ -171,12 +179,7 @@
 				onClick={() => rotateRight()}
 			/>
 		{/if}
-		<ActionButton
-			isActive={activeAction}
-			text={BRUSH}
-			icon={faPaintBrush}
-			onClick={() => brushImage()}
-		/>
+		<ActionButton isActive={activeAction} text={BRUSH} icon={faPaintBrush} } />
 		<ActionButton
 			isActive={activeAction}
 			text={BLUR}
@@ -187,10 +190,38 @@
 		<ActionButton text={TEXT} icon={faT} />
 	</div>
 
-	<div
-		class="relative flex h-full max-h-[80vh] w-full justify-center
-	{[90, 270].includes(Math.abs(rotateValue)) && 'top-20 h-[80%]'}"
-	>
+	<div class="relative flex h-full w-full">
+		<div
+			class="relative flex h-full max-h-[80vh] w-full justify-center
+	{[90, 270].includes(Math.abs(rotateValue)) && 'top-32 h-[70%]'}"
+		>
+			<button
+				class:hidden={activeAction}
+				on:click={() => prevImage()}
+				class="absolute left-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
+			>
+				<Fa icon={faChevronLeft} size="1.6x" />
+			</button>
+			{#if $galleryStore.selectedImage}
+				<img
+					bind:this={imageRef}
+					class="rounded-xl object-contain"
+					src={$galleryStore.isEditing
+						? editImageRef?.src?.toString()
+						: $galleryStore.selectedImage.src?.toString()}
+					alt={$galleryStore.selectedImage.name}
+				/>
+			{/if}
+
+			<button
+				class:hidden={activeAction}
+				on:click={() => nextImage()}
+				class="absolute right-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
+			>
+				<Fa icon={faChevronRight} size="1.6x" />
+			</button>
+		</div>
+
 		<div
 			class:hidden={!$galleryStore.isEditing}
 			class="absolute right-5 top-2 z-10 flex flex-row gap-2"
@@ -207,32 +238,6 @@
 				Apply
 			</button>
 		</div>
-
-		<button
-			class:hidden={activeAction}
-			on:click={() => prevImage()}
-			class="absolute left-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
-		>
-			<Fa icon={faChevronLeft} size="1.6x" />
-		</button>
-		{#if $galleryStore.selectedImage}
-			<img
-				bind:this={imageRef}
-				class="rounded-xl object-contain"
-				src={$galleryStore.isEditing
-					? editImageRef?.src?.toString()
-					: $galleryStore.selectedImage.src?.toString()}
-				alt={$galleryStore.selectedImage.name}
-			/>
-		{/if}
-
-		<button
-			class:hidden={activeAction}
-			on:click={() => nextImage()}
-			class="absolute right-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
-		>
-			<Fa icon={faChevronRight} size="1.6x" />
-		</button>
 	</div>
 
 	{#if showInfo}

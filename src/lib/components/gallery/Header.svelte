@@ -1,18 +1,12 @@
 <script lang="ts">
 	import { galleryStore } from '$lib/store'
 	import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
-	import {
-		faDownload,
-		faHomeAlt,
-		faInfoCircle,
-		faMultiply,
-		faRedo,
-		faUndo
-	} from '@fortawesome/free-solid-svg-icons'
+	import { faHomeAlt, faInfoCircle, faMultiply } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 	import Tooltip from '$lib/components/elements/Tooltip.svelte'
 	import { createEventDispatcher } from 'svelte'
 	import { askDeleteImage, removeImageFromTab } from '$lib/actions'
+	import { Undo, Redo, Download } from 'lucide-svelte'
 
 	export let showInfo = false
 
@@ -56,11 +50,11 @@
 	</div>
 	<div class="flex h-16 bg-blue-400 px-5 text-white">
 		<div class="mx-auto flex w-full max-w-7xl flex-row items-center justify-end gap-4">
-			<button class="h-8">
-				<Fa icon={faUndo} />
+			<button class="h-8" disabled>
+				<Undo />
 			</button>
-			<button class="h-8">
-				<Fa icon={faRedo} />
+			<button class="h-8" disabled>
+				<Redo />
 			</button>
 			<button
 				class="h-8 {showInfo && 'border-b border-white'}"
@@ -73,7 +67,7 @@
 			</button>
 			<!-- {#if $galleryStore.isEditing}
 				<button class="h-8">
-					<Fa icon={faDownload} />
+					<Download size="18" />
 				</button>
 			{/if} -->
 		</div>
