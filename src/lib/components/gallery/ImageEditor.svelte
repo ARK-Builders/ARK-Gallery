@@ -160,6 +160,19 @@
 		activeAction = ''
 		$galleryStore.isEditing = false
 	}
+
+	const handleKeyDown = (e: KeyboardEvent) => {
+		switch (e.code) {
+			case 'ArrowLeft':
+				prevImage()
+				break
+			case 'ArrowRight':
+				nextImage()
+				break
+			default:
+				break
+		}
+	}
 </script>
 
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
@@ -256,3 +269,5 @@
 		<BlurImagePanel bind:blurLevel />
 	{/if}
 </div>
+
+<svelte:window on:keydown|preventDefault|stopPropagation={handleKeyDown} />
