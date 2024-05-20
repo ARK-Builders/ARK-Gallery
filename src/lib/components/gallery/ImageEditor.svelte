@@ -162,6 +162,7 @@
 	}
 
 	const handleKeyDown = (e: KeyboardEvent) => {
+		if ($galleryStore.isEditing || activeAction) return
 		switch (e.code) {
 			case 'ArrowLeft':
 				prevImage()
@@ -176,7 +177,7 @@
 </script>
 
 <div class="mx-auto flex h-[75vh] w-full max-w-7xl flex-row gap-6 px-5 py-12">
-	<div class="flex w-36 flex-col gap-6 rounded-xl bg-white py-5 shadow-lg">
+	<div class="flex w-36 flex-col gap-6 truncate rounded-xl bg-white py-5 shadow-lg">
 		<ActionButton
 			isActive={rotate ? trimString(ROTATE_90) : ''}
 			text={ROTATE_90}
@@ -199,7 +200,7 @@
 				onClick={() => rotateLeft()}
 			/>
 		{/if}
-		<ActionButton isActive={activeAction} text={BRUSH} icon={faPaintBrush} } />
+		<ActionButton isActive={activeAction} text={BRUSH} icon={faPaintBrush} />
 		<ActionButton
 			isActive={activeAction}
 			text={BLUR}
@@ -234,9 +235,9 @@
 		{[90, 270].includes(Math.abs(rotateValue)) && 'top-32 h-[75%]'}"
 		>
 			<button
-				class:hidden={activeAction}
+				class:hidden={$galleryStore.isEditing}
 				on:click={() => prevImage()}
-				class="absolute left-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
+				class="absolute left-5 top-[50%] z-10 flex h-10 w-10 items-center rounded-full border p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
 			>
 				<Fa icon={faChevronLeft} size="1.6x" />
 			</button>
@@ -252,9 +253,9 @@
 			{/if}
 
 			<button
-				class:hidden={activeAction}
+				class:hidden={$galleryStore.isEditing}
 				on:click={() => nextImage()}
-				class="absolute right-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
+				class="absolute right-5 top-[50%] flex h-10 w-10 items-center rounded-full border p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
 			>
 				<Fa icon={faChevronRight} size="1.6x" />
 			</button>
