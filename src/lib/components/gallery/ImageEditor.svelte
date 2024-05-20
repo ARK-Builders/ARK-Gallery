@@ -174,16 +174,16 @@
 			<ActionButton
 				borderDown
 				isActive={activeAction}
-				text={ROTATE_LEFT}
-				icon={faRotateLeft}
-				onClick={() => rotateLeft()}
+				text={ROTATE_RIGHT}
+				icon={faRotateRight}
+				onClick={() => rotateRight()}
 			/>
 			<ActionButton
 				borderDown
 				isActive={activeAction}
-				text={ROTATE_RIGHT}
-				icon={faRotateRight}
-				onClick={() => rotateRight()}
+				text={ROTATE_LEFT}
+				icon={faRotateLeft}
+				onClick={() => rotateLeft()}
 			/>
 		{/if}
 		<ActionButton isActive={activeAction} text={BRUSH} icon={faPaintBrush} } />
@@ -197,10 +197,28 @@
 		<ActionButton text={TEXT} icon={faT} />
 	</div>
 
-	<div class="relative flex h-full w-full">
+	<div class="relative flex w-full flex-col">
+		<div
+			class:hidden={!$galleryStore.isEditing}
+			class="absolute right-5 top-2 z-10 flex flex-row gap-2"
+		>
+			<button
+				on:click={() => resetImage()}
+				class="flex items-center rounded-lg border bg-white px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 hover:text-black"
+			>
+				Reset
+			</button>
+			<button
+				on:click={() => applyChanges()}
+				class="flex items-center rounded-lg bg-blue-400 px-3 py-1 text-sm text-white hover:bg-blue-300"
+			>
+				Apply
+			</button>
+		</div>
+
 		<div
 			class="relative flex h-full max-h-[80vh] w-full justify-center
-	{[90, 270].includes(Math.abs(rotateValue)) && 'top-32 h-[70%]'}"
+		{[90, 270].includes(Math.abs(rotateValue)) && 'top-32 h-[75%]'}"
 		>
 			<button
 				class:hidden={activeAction}
@@ -226,24 +244,6 @@
 				class="absolute right-5 top-[50%] flex h-10 w-10 items-center rounded-full p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
 			>
 				<Fa icon={faChevronRight} size="1.6x" />
-			</button>
-		</div>
-
-		<div
-			class:hidden={!$galleryStore.isEditing}
-			class="absolute right-5 top-2 z-10 flex flex-row gap-2"
-		>
-			<button
-				on:click={() => resetImage()}
-				class="flex items-center rounded-lg bg-white px-3 py-1 text-gray-700 hover:bg-gray-100 hover:text-black"
-			>
-				Reset
-			</button>
-			<button
-				on:click={() => applyChanges()}
-				class="flex items-center rounded-lg bg-blue-400 px-3 py-1 text-white hover:bg-blue-300"
-			>
-				Apply
 			</button>
 		</div>
 	</div>
