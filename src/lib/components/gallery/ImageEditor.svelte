@@ -231,7 +231,7 @@
 		</div>
 
 		<div
-			class="relative flex h-full max-h-[80vh] w-full justify-center
+			class="relative flex max-h-[80vh] w-full justify-center
 		{[90, 270].includes(Math.abs(rotateValue)) && 'top-32 h-[75%]'}"
 		>
 			<button
