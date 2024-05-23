@@ -233,7 +233,11 @@
 			<Actions
 				hasImages={$galleryStore.images.length > 0}
 				on:upload={() => uploadFolder()}
-				on:deleteImage={() => {deleteModal = true}}
+				on:deleteImage={() => {
+					if (selectedImage) {
+						deleteModal = true
+					}
+				}}
 			/>
 		</div>
 		<div class="my-5">
