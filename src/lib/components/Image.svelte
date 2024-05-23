@@ -25,7 +25,7 @@
 		goto('/view?image=' + image.id)
 	}}
 	{...$$restProps}
-	class:outline={isSelected && !hasHover}
+	class:outline={isSelected}
 	class={`relative flex flex-col rounded-md bg-gray-100 outline-blue-200 ${hasHover ? 'rounded-b-none' : ''}`}
 >
 	<img
