@@ -187,7 +187,6 @@
 				break
 		}
 	}
-
 </script>
 
 <svelte:head>

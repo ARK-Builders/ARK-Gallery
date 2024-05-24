@@ -27,8 +27,7 @@
 		<Button
 			slot="tip-trigger"
 			variant={'outline'}
-			disabled={false} 
-			
+			disabled={false}
 			on:click={() => dispatch('deleteImage')}
 			class="rounded-lg bg-gray-200 px-3 {!hasImages ? 'hidden' : ''}"
 		>
