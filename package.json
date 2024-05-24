@@ -12,16 +12,25 @@
 		"lint": "prettier --check ./src",
 		"format": "prettier --write ./src"
 	},
-	"devDependencies": {
+	"type": "module",
+	"dependencies": {
+		"@sveltejs/adapter-vercel": "^5.1.0",
+		"@tauri-apps/api": "^1.5.3",
+		"bits-ui": "^0.16.0",
+		"clsx": "^2.1.0",
+		"lucide-svelte": "^0.316.0",
+		"tailwind-merge": "^2.2.1",
+		"tailwind-variants": "^0.1.20",
+		"@tauri-apps/cli": "^1.5.11",
 		"@fortawesome/free-regular-svg-icons": "^6.5.1",
 		"@fortawesome/free-solid-svg-icons": "^6.5.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"@tauri-apps/cli": "^1.5.11",
 		"autoprefixer": "^10.4.17",
 		"dayjs": "^1.11.10",
+		"image-js": "^0.35.5",
 		"postcss": "^8.4.33",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
@@ -34,16 +43,5 @@
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^5.0.3"
-	},
-	"type": "module",
-	"dependencies": {
-		"@sveltejs/adapter-vercel": "^5.1.0",
-		"@tauri-apps/api": "^1.5.3",
-		"bits-ui": "^0.16.0",
-		"clsx": "^2.1.0",
-		"image-js": "^0.35.5",
-		"lucide-svelte": "^0.316.0",
-		"tailwind-merge": "^2.2.1",
-		"tailwind-variants": "^0.1.20"
 	}
 }
