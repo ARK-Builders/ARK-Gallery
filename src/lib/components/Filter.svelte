@@ -19,7 +19,6 @@
 		{ value: 'size', label: 'size' },
 		{ value: 'tag', label: 'tag' }
 	]
-
 </script>
 
 <div class="flex w-full flex-row items-center rounded-full bg-white px-10 py-3 shadow-lg">

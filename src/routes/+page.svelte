@@ -193,7 +193,6 @@
 			selectedImage = null
 		}
 	}
-
 </script>
 
 <svelte:head>

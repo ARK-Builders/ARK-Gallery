@@ -16,21 +16,18 @@
 		})
 		return acc
 	}, [])
-
 </script>
 
 <div class="flex flex-row flex-wrap items-center gap-3">
 	<button
-			on:click={() => {
-				selectedTags.length == 0
-					? (selectedTags = tags)
-					: (selectedTags = [])
-			}}
-			class="flex h-9 items-center rounded border border-[#94A3B8] px-3
+		on:click={() => {
+			selectedTags.length == 0 ? (selectedTags = tags) : (selectedTags = [])
+		}}
+		class="flex h-9 items-center rounded border border-[#94A3B8] px-3
 				{selectedTags.length > 0 ? 'bg-blue-400 text-white' : ''}"
-		>
-			<Fa icon={selectedTags.length > 0 ? faMinus: faCheck} />
-		</button>
+	>
+		<Fa icon={selectedTags.length > 0 ? faMinus : faCheck} />
+	</button>
 	{#each tags as tag}
 		<button
 			on:click={() => {

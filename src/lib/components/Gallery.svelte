@@ -11,7 +11,7 @@
 
 	export let images: ImageType[] = []
 
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher()
 </script>
 
 <div
@@ -33,7 +33,6 @@
 				on:deleteTag={(e) => {
 					dispatch('deleteTag', { id: image.id, tag: e.detail })
 				}}
-
 				on:click={() => (selectedImage = image)}
 				{image}
 				isSelected={selectedImage?.id == image.id}

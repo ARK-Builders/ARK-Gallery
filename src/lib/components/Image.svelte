@@ -10,7 +10,6 @@
 	export let image: ImageType
 
 	let hasHover = false
-
 	let newTag = ''
 
 	const dispatch = createEventDispatcher()
@@ -35,7 +34,7 @@
 		alt="image {image.name}"
 	/>
 	{#if hasHover}
-		<div class="absolute bottom-0 left-0 right-0 z-10 translate-y-full flex gap-[0.5px] flex-col">
+		<div class="absolute bottom-0 left-0 right-0 z-10 flex translate-y-full flex-col gap-[0.5px]">
 			<div
 				class="flex w-full items-center justify-start gap-1 bg-white px-2 text-black last:rounded-b-md"
 			>
