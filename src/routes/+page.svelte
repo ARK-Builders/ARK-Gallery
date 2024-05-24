@@ -161,6 +161,8 @@
 	}
 
 	$: {
+		images = $galleryStore.images
+
 		switch (sort.value) {
 			case 'date':
 				images = $galleryStore.images.sort((a: ImageType, b: ImageType) => {
@@ -185,6 +187,10 @@
 			default:
 				images = $galleryStore.images
 				break
+		}
+
+		if (selectedImage && !images.includes(selectedImage)) {
+			selectedImage = null
 		}
 	}
 
