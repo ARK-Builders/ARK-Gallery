@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { galleryStore } from '$lib/store'
 	import { faCheck, faMinus } from '@fortawesome/free-solid-svg-icons'
-	import { createEventDispatcher } from 'svelte'
 	import Fa from 'svelte-fa'
 
 	export let selectedTags: string[] = []

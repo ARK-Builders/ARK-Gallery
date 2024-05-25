@@ -9,14 +9,13 @@
 	import { removeFile } from '@tauri-apps/api/fs'
 
 	let showInfo = false
-
 	let tabs: ImageType[] = []
 	let activeTab = 0
+	let deleteModal = false
 
 	onMount(() => {
 		const urlParams = new URLSearchParams(window.location.search)
 		const imageId = urlParams.get('image')
-
 		const image = $galleryStore.images.find((img) => img.id === imageId)
 
 		if (!image) {
@@ -39,8 +38,6 @@
 					$galleryStore.images.length
 			]
 	}
-
-	let deleteModal = false
 </script>
 
 <DeleteModal
@@ -51,16 +48,6 @@
 	on:softDelete={async () => {
 		if (tabs[activeTab]?.path) {
 			await invoke('move_file_to_trash', { filePath: tabs[activeTab].path })
-			$galleryStore.images = $galleryStore.images.filter(
-				(img) => tabs[activeTab] && img.path !== tabs[activeTab].path
-			)
-			deleteModal = false
-			next()
-		}
-	}}
-	on:hardDelete={async () => {
-		if (tabs[activeTab]?.path) {
-			await removeFile(tabs[activeTab].path)
 			$galleryStore.images = $galleryStore.images.filter(
 				(img) => tabs[activeTab] && img.path !== tabs[activeTab].path
 			)

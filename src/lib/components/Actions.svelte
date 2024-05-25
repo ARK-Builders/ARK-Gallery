@@ -5,11 +5,10 @@
 	import { createEventDispatcher } from 'svelte'
 	import Fa from 'svelte-fa'
 
-	const dispatch = createEventDispatcher()
 	export let hasImages = false
+	const dispatch = createEventDispatcher()
 </script>
 
-<!-- // TODO: FIXME -->
 <div class="flex flex-row justify-end gap-3">
 	<Tooltip>
 		<Button

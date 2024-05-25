@@ -213,15 +213,6 @@
 			deleteModal = false
 		}
 	}}
-	on:hardDelete={async () => {
-		if (selectedImage?.path) {
-			await removeFile(selectedImage.path)
-			$galleryStore.images = $galleryStore.images.filter(
-				(img) => selectedImage && img.path !== selectedImage.path
-			)
-			deleteModal = false
-		}
-	}}
 />
 
 <div class="flex h-screen w-full flex-col justify-start">
