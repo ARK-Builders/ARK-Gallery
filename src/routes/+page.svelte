@@ -5,17 +5,13 @@
 	import TagsList from '$lib/components/TagsList.svelte'
 	import Footer from '$lib/components/Footer.svelte'
 	import DeleteModal from '$lib/components/DeleteModal.svelte'
-
 	import { open } from '@tauri-apps/api/dialog'
 	import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
-	import { readDir, removeFile } from '@tauri-apps/api/fs'
+	import { readDir } from '@tauri-apps/api/fs'
 	import { listen } from '@tauri-apps/api/event'
-
 	import { makeid } from '$lib/utils/tools'
 	import { galleryStore } from '$lib/store'
-
 	import type { ImageType } from '$lib/utils/types'
-	import { path } from '@tauri-apps/api'
 
 	let imageDropping = false
 	let deleteModal = false

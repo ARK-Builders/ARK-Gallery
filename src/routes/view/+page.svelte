@@ -6,7 +6,8 @@
 	import type { ImageType } from '$lib/utils/types'
 	import DeleteModal from '$lib/components/DeleteModal.svelte'
 	import { invoke } from '@tauri-apps/api/tauri'
-	import { removeFile } from '@tauri-apps/api/fs'
+	import { page } from '$app/stores'
+	import { goto } from '$app/navigation'
 
 	let showInfo = false
 	let tabs: ImageType[] = []
@@ -14,10 +15,8 @@
 	let deleteModal = false
 
 	onMount(() => {
-		const urlParams = new URLSearchParams(window.location.search)
-		const imageId = urlParams.get('image')
+		const imageId = $page.url.searchParams.get('image')
 		const image = $galleryStore.images.find((img) => img.id === imageId)
-
 		if (!image) {
 			return
 		}
@@ -52,7 +51,8 @@
 				(img) => tabs[activeTab] && img.path !== tabs[activeTab].path
 			)
 			deleteModal = false
-			next()
+			if ($galleryStore.images.length) next()
+			else goto('/')
 		}
 	}}
 />
