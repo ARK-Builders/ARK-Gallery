@@ -41,7 +41,11 @@
 						</span>
 						<button
 							on:click|stopPropagation={() => {
-								tabs = tabs.filter((tab) => tab !== viewedImage)
+								// Tabs not working as expected
+								// TODO: Fix tabs
+								// tabs = tabs.filter((tab) => tab !== viewedImage)
+								tabs = []
+								goto('/')
 							}}
 							class="absolute right-1 top-1"
 						>
