@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { faHomeAlt, faInfoCircle, faMultiply, faRedo, faUndo } from '@fortawesome/free-solid-svg-icons'
+	import {
+		faHomeAlt,
+		faInfoCircle,
+		faMultiply,
+		faRedo,
+		faUndo
+	} from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 	import { createEventDispatcher } from 'svelte'
 	import { goto } from '$app/navigation'
@@ -8,10 +14,8 @@
 	import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 
 	export let showInfo = false
-
 	export let tabs: ImageType[] = []
 	export let activeTab = 0
-
 
 	const dispatch = createEventDispatcher()
 </script>
@@ -37,7 +41,11 @@
 						</span>
 						<button
 							on:click|stopPropagation={() => {
-								tabs = tabs.filter((tab) => tab !== viewedImage)
+								// Tabs not working as expected
+								// TODO: Fix tabs
+								// tabs = tabs.filter((tab) => tab !== viewedImage)
+								tabs = []
+								goto('/')
 							}}
 							class="absolute right-1 top-1"
 						>
@@ -63,9 +71,12 @@
 			>
 				<Fa icon={faInfoCircle} />
 			</button>
-			<button class="h-8" on:click={() => {
-				dispatch('delete')
-			}}>
+			<button
+				class="h-8"
+				on:click={() => {
+					dispatch('delete')
+				}}
+			>
 				<Fa icon={faTrashAlt} />
 			</button>
 		</div>

@@ -58,7 +58,9 @@
 					class="flex w-full items-center justify-start gap-1 bg-white px-2 text-black last:rounded-b-md"
 				>
 					<span class="left-1 text-lg">#</span>
-					<span class="w-full flex-1 bg-transparent text-left focus:outline-none">{tag}</span>
+					<span class="w-full flex-1 truncate bg-transparent text-left focus:outline-none"
+						>{tag}</span
+					>
 					<button
 						on:click={() => {
 							dispatch('deleteTag', tag)

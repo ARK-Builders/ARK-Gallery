@@ -1,12 +1,10 @@
-<script>
+<script lang="ts">
 	import { faMultiply } from '@fortawesome/free-solid-svg-icons'
 	import { createEventDispatcher } from 'svelte'
 	import Fa from 'svelte-fa'
 	import Button from './ui/button/button.svelte'
 
 	export let show = false
-
-	let hasConfirmed = false
 
 	const dispatch = createEventDispatcher()
 
@@ -16,14 +14,6 @@
 
 	function handleSoftDelete() {
 		dispatch('softDelete')
-	}
-
-	function handleHardDelete() {
-		if (!hasConfirmed) {
-			hasConfirmed = true
-		} else {
-			dispatch('hardDelete')
-		}
 	}
 </script>
 

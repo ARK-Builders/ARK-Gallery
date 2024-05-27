@@ -6,9 +6,7 @@
 	import { createEventDispatcher } from 'svelte'
 
 	export let zoomLevel: number[]
-
 	export let selectedImage: ImageType | null
-
 	export let images: ImageType[] = []
 
 	const dispatch = createEventDispatcher()
