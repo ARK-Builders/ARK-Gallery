@@ -181,8 +181,9 @@
 				break
 			case 'tag':
 				images = $galleryStore.images.filter((img) => {
-					return img.tags.some((tag) => selectedTags.includes(tag))
+					return selectedTags.every((tag) => img.tags.includes(tag))
 				})
+				
 				break
 			default:
 				images = $galleryStore.images
