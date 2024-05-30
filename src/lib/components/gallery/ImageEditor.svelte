@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { galleryStore } from '$lib/store'
 	import {
 		faChevronLeft,
 		faChevronRight,
@@ -36,7 +35,6 @@
 	let activeAction: string = ''
 	let imageRef: HTMLImageElement | null = null
 	let blurLevel = 0
-
 	let isEditing = false
 	let rotate = false
 	let rotateValue = 0
