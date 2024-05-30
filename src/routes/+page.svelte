@@ -12,6 +12,7 @@
 	import { makeid } from '$lib/utils/tools'
 	import { galleryStore } from '$lib/store'
 	import type { ImageType } from '$lib/utils/types'
+	import DropPlaceholder from '$lib/components/DropPlaceholder.svelte'
 
 	let imageDropping = false
 	let deleteModal = false
@@ -179,7 +180,7 @@
 				images = $galleryStore.images.filter((img) => {
 					return selectedTags.every((tag) => img.tags.includes(tag))
 				})
-				
+
 				break
 			default:
 				images = $galleryStore.images
@@ -214,11 +215,7 @@
 
 <div class="flex h-screen w-full flex-col justify-start">
 	{#if imageDropping}
-		<div
-			class="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-blue-300 bg-opacity-50"
-		>
-			<p class="text-2xl font-bold text-white">Drop your images here</p>
-		</div>
+		<DropPlaceholder />
 	{/if}
 	<div class="mx-auto flex h-full w-full max-w-7xl flex-col justify-start p-5">
 		<Filter bind:sort />

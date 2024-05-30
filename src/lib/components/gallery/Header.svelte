@@ -1,17 +1,12 @@
 <script lang="ts">
-	import {
-		faHomeAlt,
-		faInfoCircle,
-		faMultiply,
-		faRedo,
-		faUndo
-	} from '@fortawesome/free-solid-svg-icons'
+	import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
+	import { faHomeAlt, faInfoCircle, faMultiply } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 	import { createEventDispatcher } from 'svelte'
+	import { Undo, Redo, Download } from 'lucide-svelte'
 	import { goto } from '$app/navigation'
 	import type { ImageType } from '$lib/utils/types'
 	import Tooltip from '../elements/Tooltip.svelte'
-	import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 
 	export let showInfo = false
 	export let tabs: ImageType[] = []
@@ -59,11 +54,11 @@
 	</div>
 	<div class="flex h-16 bg-blue-400 px-5 text-white">
 		<div class="mx-auto flex w-full max-w-7xl flex-row items-center justify-end gap-4">
-			<button class="h-8">
-				<Fa icon={faUndo} />
+			<button class="h-8" disabled>
+				<Undo />
 			</button>
-			<button class="h-8">
-				<Fa icon={faRedo} />
+			<button class="h-8" disabled>
+				<Redo />
 			</button>
 			<button
 				class="h-8 {showInfo && 'border-b border-white'}"
@@ -79,6 +74,11 @@
 			>
 				<Fa icon={faTrashAlt} />
 			</button>
+			<!-- {#if $galleryStore.isEditing}
+				<button class="h-8">
+					<Download size="18" />
+				</button>
+			{/if} -->
 		</div>
 	</div>
 </div>

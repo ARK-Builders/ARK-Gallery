@@ -85,34 +85,6 @@ export function makeid(length: number) {
 	return str
 }
 
-export const proccessFiles = async (files: File[]) => {
-	return new Promise((resolve) => {
-		const __process = async () => {
-			let images: any[] = []
-
-			files.forEach((file) => {
-				if (file.type && !file.type.startsWith('image/')) {
-					console.error('File is not an image.', file.type, file)
-					return
-				}
-				let reader = new FileReader()
-
-				reader.addEventListener(
-					'load',
-					() => {
-						images.push(reader.result)
-					},
-					false
-				)
-
-				if (file) {
-					reader.readAsDataURL(file)
-				}
-			})
-
-			resolve(images)
-		}
-		__process()
-	})
-	// return images
+export function trimString(str: string) {
+	return str.trim().replaceAll(' ', '').toLowerCase()
 }
