@@ -43,8 +43,6 @@
 	let imageObj: Image | null = null
 	let editImageRef: ImageType | null
 
-	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf(image?.id)
-
 	const loadImage = async () => {
 		if (image?.src) {
 			// Load image with image-js for further other functionality
