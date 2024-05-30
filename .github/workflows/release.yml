@@ -33,10 +33,10 @@ jobs:
             pkg-config
 
       - name: Fetch Node.js dependencies
-        run: yarn
+        run: npm install
 
       - name: Build Release version
-        run: yarn tauri build
+        run: npm run tauri build
 
       - name: Release AppImage
         uses: ncipollo/release-action@v1

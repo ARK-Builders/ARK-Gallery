@@ -14,13 +14,15 @@
 	import ImageDetails from '$lib/components/gallery/ImageDetails.svelte'
 	import ActionButton from '$lib/components/gallery/ActionButton.svelte'
 	import Fa from 'svelte-fa'
-	import { replaceImageInTab } from '$lib/actions'
 	import { trimString } from '$lib/utils/tools'
 	import BlurImagePanel from './BlurImagePanel.svelte'
 	import ImageJs, { Image } from 'image-js'
 	import type { ImageType } from '$lib/utils/types'
-	import { onDestroy } from 'svelte'
+	import { createEventDispatcher, onDestroy } from 'svelte'
 
+	const dispatch = createEventDispatcher()
+
+	export let image: ImageType
 	export let showInfo = false
 
 	const ROTATE_90 = 'Rotate 90°'
@@ -35,38 +37,23 @@
 	let imageRef: HTMLImageElement | null = null
 	let blurLevel = 0
 
+	let isEditing = false
 	let rotate = false
 	let rotateValue = 0
 	let imageObj: Image | null = null
 	let editImageRef: ImageType | null
 
-	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf($galleryStore.selectedImage?.id)
+	$: idx = $galleryStore.images.map((item: any) => item.id).indexOf(image?.id)
 
 	const loadImage = async () => {
-		if ($galleryStore.selectedImage?.src) {
+		if (image?.src) {
 			// Load image with image-js for further other functionality
-			imageObj = await ImageJs.load($galleryStore.selectedImage?.src)
+			imageObj = await ImageJs.load(image?.src)
 		}
 	}
 
-	if ($galleryStore.selectedImage?.src) {
+	if (image?.src) {
 		loadImage()
-	}
-
-	const prevImage = () => {
-		if (idx && $galleryStore.images.length > 0) {
-			idx--
-			$galleryStore.selectedImage = $galleryStore.images[idx]
-			replaceImageInTab($galleryStore.activeTabIndex)
-		}
-	}
-
-	const nextImage = () => {
-		if (idx > -1 && idx < $galleryStore.images.length - 1) {
-			idx++
-			$galleryStore.selectedImage = $galleryStore.images[idx]
-			replaceImageInTab($galleryStore.activeTabIndex)
-		}
 	}
 
 	const toggleAction = (active: string) => {
@@ -120,14 +107,14 @@
 	}
 
 	const enableEditing = () => {
-		if (imageRef && !$galleryStore.isEditing) {
-			$galleryStore.isEditing = true
-			editImageRef = $galleryStore.selectedImage
+		if (imageRef && !isEditing) {
+			isEditing = true
+			editImageRef = image
 		}
 	}
 
 	const resetImage = () => {
-		$galleryStore.isEditing = false
+		isEditing = false
 		activeAction = ''
 		editImageRef = null
 		if (imageRef) {
@@ -158,17 +145,17 @@
 		// TODO: implement apply image chanages
 		rotate = false
 		activeAction = ''
-		$galleryStore.isEditing = false
+		isEditing = false
 	}
 
 	const handleKeyDown = (e: KeyboardEvent) => {
-		if ($galleryStore.isEditing || activeAction) return
+		if (isEditing || activeAction) return
 		switch (e.code) {
 			case 'ArrowLeft':
-				prevImage()
+				dispatch('previous')
 				break
 			case 'ArrowRight':
-				nextImage()
+				dispatch('next')
 				break
 			default:
 				break
@@ -212,10 +199,7 @@
 	</div>
 
 	<div class="relative flex w-full flex-col">
-		<div
-			class:hidden={!$galleryStore.isEditing}
-			class="absolute right-5 top-2 z-10 flex flex-row gap-2"
-		>
+		<div class:hidden={!isEditing} class="absolute right-5 top-2 z-10 flex flex-row gap-2">
 			<button
 				on:click={() => resetImage()}
 				class="flex items-center rounded-lg border bg-white px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 hover:text-black"
@@ -235,26 +219,24 @@
 		{[90, 270].includes(Math.abs(rotateValue)) && 'top-32 h-[75%]'}"
 		>
 			<button
-				class:hidden={$galleryStore.isEditing}
-				on:click={() => prevImage()}
+				class:hidden={isEditing}
+				on:click={() => dispatch('previous')}
 				class="absolute left-5 top-[50%] z-10 flex h-10 w-10 items-center rounded-full border p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
 			>
 				<Fa icon={faChevronLeft} size="1.6x" />
 			</button>
-			{#if $galleryStore.selectedImage}
+			{#if image}
 				<img
 					bind:this={imageRef}
 					class="rounded-xl object-contain"
-					src={$galleryStore.isEditing
-						? editImageRef?.src?.toString()
-						: $galleryStore.selectedImage.src?.toString()}
-					alt={$galleryStore.selectedImage.name}
+					src={isEditing ? editImageRef?.src?.toString() : image.src?.toString()}
+					alt={image.name}
 				/>
 			{/if}
 
 			<button
-				class:hidden={$galleryStore.isEditing}
-				on:click={() => nextImage()}
+				class:hidden={isEditing}
+				on:click={() => dispatch('next')}
 				class="absolute right-5 top-[50%] flex h-10 w-10 items-center rounded-full border p-3 text-gray-400 hover:bg-gray-100 hover:bg-opacity-80 hover:text-black"
 			>
 				<Fa icon={faChevronRight} size="1.6x" />
@@ -263,7 +245,7 @@
 	</div>
 
 	{#if showInfo}
-		<ImageDetails />
+		<ImageDetails {image} />
 	{/if}
 
 	{#if activeAction == trimString(BLUR)}
