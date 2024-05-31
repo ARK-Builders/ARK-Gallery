@@ -1,9 +1,10 @@
 export type ImageType = {
 	id: string
-	src: string | ArrayBuffer | null
-	tag: string
+	src: string
+	tags: string[]
 	name: string
 	size: number
-	lastModified: string | number
+	lastModified: string
 	type: string
+	path: string
 }
