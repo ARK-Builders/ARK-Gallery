@@ -18,7 +18,8 @@ tauri-build = { version = "1.5.1", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 trash = "4.1.0"
-tauri = { version = "1.6.1", features = [ "fs-remove-file",
+tauri = { version = "1.6.7", features = [
+    "fs-remove-file",
     "protocol-asset",
     "fs-read-file",
     "fs-read-dir",
