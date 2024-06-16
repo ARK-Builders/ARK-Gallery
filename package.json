@@ -12,7 +12,18 @@
 		"lint": "prettier --check ./src",
 		"format": "prettier --write ./src"
 	},
-	"devDependencies": {
+	"type": "module",
+	"dependencies": {
+		"@sveltejs/adapter-vercel": "^5.1.0",
+		"@tauri-apps/api": "^1.5.3",
+		"bits-ui": "^0.16.0",
+		"clsx": "^2.1.0",
+		"lucide-svelte": "^0.316.0",
+		"tailwind-merge": "^2.2.1",
+		"tailwind-variants": "^0.1.20",
+		"@tauri-apps/cli": "^1.5.11",
+		"@fortawesome/free-regular-svg-icons": "^6.5.1",
+		"@fortawesome/free-solid-svg-icons": "^6.5.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
@@ -28,22 +39,5 @@
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^5.0.3"
-	},
-	"type": "module",
-	"dependencies": {
-		"@fortawesome/free-regular-svg-icons": "^6.5.1",
-		"@fortawesome/free-solid-svg-icons": "^6.5.1",
-		"@tauri-apps/cli": "^1.5.11",
-		"@sveltejs/adapter-vercel": "^5.1.0",
-		"@tauri-apps/api": "^1.5.3",
-		"bits-ui": "^0.16.0",
-		"clsx": "^2.1.0",
-		"dayjs": "^1.11.10",
-		"exifreader": "^4.22.1",
-		"lucide-svelte": "^0.316.0",
-		"svelte-fa": "^4.0.2",
-		"svelte-sonner": "^0.3.22",
-		"tailwind-merge": "^2.2.1",
-		"tailwind-variants": "^0.1.20"
 	}
 }
