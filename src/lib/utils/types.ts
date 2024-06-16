@@ -4,6 +4,8 @@ export type ImageType = {
 	tags: string[]
 	name: string
 	size: number
+	resolution: string
+	compression: number | undefined
 	lastModified: string
 	type: string
 	path: string

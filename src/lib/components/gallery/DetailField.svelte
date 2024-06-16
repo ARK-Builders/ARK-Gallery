@@ -3,7 +3,7 @@
 	import Fa from 'svelte-fa'
 
 	export let text: string = ''
-	export let value: string | number = ''
+	export let value: string | number | undefined = ''
 	export let icon: IconDefinition | null = null
 </script>
 
@@ -15,6 +15,6 @@
 		{text}
 	</p>
 	<p class="font-semibold">
-		{value || ''}
+		{value != undefined || value != null ? value : ''}
 	</p>
 </div>

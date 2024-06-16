@@ -12,6 +12,7 @@
 	import { makeid } from '$lib/utils/tools'
 	import { galleryStore } from '$lib/store'
 	import type { ImageType } from '$lib/utils/types'
+	import ExifReader from 'exifreader'
 
 	let imageDropping = false
 	let deleteModal = false
@@ -97,14 +98,17 @@
 					modified_time: string
 					accessed_time: string
 				} = await invoke('get_file_metadata', { filePath: file })
+				const EXIF = await ExifReader.load(convertFileSrc(file), { async: true })
 
 				return {
 					id: makeid(5),
 					src: convertFileSrc(file),
 					name: file,
 					size: metadata.file_size,
-					lastModified: metadata.modified_time,
-					type: metadata.file_type,
+					lastModified: EXIF['ICC Profile Date'].value,
+					type: EXIF['FileType']?.value,
+					compression: EXIF['Compression']?.value,
+					resolution: `${EXIF['Image Width']?.value} x ${EXIF['Image Height']?.value}`,
 					tags: [],
 					path: file
 				} as ImageType
@@ -179,7 +183,7 @@
 				images = $galleryStore.images.filter((img) => {
 					return selectedTags.every((tag) => img.tags.includes(tag))
 				})
-				
+
 				break
 			default:
 				images = $galleryStore.images
